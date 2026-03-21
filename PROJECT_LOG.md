@@ -531,3 +531,61 @@ src/app/jobs/page.tsx            # Added contact finder button + modal
 - Get a free Hunter.io API key at https://hunter.io/api-keys
 - Add `HUNTER_API_KEY=your_key_here` to `.env.local`
 - Free tier: 25 searches/month
+
+---
+
+## Feature: Interview Prep + Skills Roadmap ✅
+**Date:** 2026-03-21
+
+### What was built
+
+#### Interview Preparation (`/interview-prep`)
+- AI-powered interview question generator using Groq LLM
+- Categorized Q&A: Behavioral, Technical, Situational, Role-Specific
+- Each question has a **tip** and **sample answer**
+- "Questions to Ask" section with smart interviewer questions
+- General interview tips
+- Custom search: enter any job title + company to generate fresh questions
+- Accessible from every job card via "Interview Prep" button
+
+#### Skills Gap & Roadmap (`/skills-roadmap`)
+- AI analyzes gap between user's profile skills and job requirements
+- **Gap Analysis**: missing skills (prioritized: critical/important/nice-to-have) + existing strengths
+- **Learning Roadmap**: 3-4 phased learning plan with tasks, real resources, and durations
+- **Portfolio Projects**: 3 project ideas with difficulty ratings and skill tags
+- **Certifications**: recommended certs with provider, cost, and links
+- **Timeline**: estimated weeks and hours/week
+- Pulls user skills from saved profile automatically
+- Accessible from every job card via "Skills Roadmap" button
+
+### New files
+```
+src/
+├── app/
+│   ├── interview-prep/page.tsx           # Interview prep UI (tabbed Q&A)
+│   ├── skills-roadmap/page.tsx           # Skills gap + roadmap UI
+│   └── api/
+│       ├── interview-prep/route.ts       # Groq AI interview question generation
+│       └── skills-roadmap/route.ts       # Groq AI skills analysis + roadmap
+```
+
+### Modified files
+```
+src/app/jobs/page.tsx                     # Added Interview Prep + Skills Roadmap buttons per job card
+```
+
+---
+
+## UI Overhaul ✅
+**Date:** 2026-03-21
+
+### Changes
+- **Color palette**: Darker background (#050507), richer purples (#7c3aed primary)
+- **Navbar**: Gradient logo, compact nav pills, avatar dropdown with email display
+- **Hero**: Dot grid texture, 3 gradient orbs, stat chips (Match Scoring, AI Analysis, Jobs)
+- **Features**: Individual colored icon glows, gradient hover cards
+- **How It Works**: Floating step number badges, card-based layout
+- **CTA**: Dual gradient orbs, grid overlay, "No sign-up required" badge
+- **Footer**: Matching gradient logo, navigation links
+- **Internal pages**: Consistent glassmorphism headers (`bg-background/70 backdrop-blur-2xl`)
+- **Globals**: `.bg-grid` dot texture, `.glow-sm/.glow-md` utilities, custom selection color
