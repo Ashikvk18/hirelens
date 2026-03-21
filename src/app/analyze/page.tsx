@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { AnalyzerForm } from "@/components/analyzer/analyzer-form";
+import { UserMenu } from "@/components/auth/user-menu";
 
 export default function AnalyzePage() {
   return (
@@ -19,9 +20,9 @@ export default function AnalyzePage() {
             <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
               <span className="text-xs font-bold text-white">H</span>
             </div>
-            <span className="text-sm font-semibold">HireLens Analyzer</span>
+            <span className="text-sm font-semibold hidden sm:inline">HireLens Analyzer</span>
           </div>
-          <div className="w-[100px]" />
+          <UserMenu />
         </div>
       </header>
 

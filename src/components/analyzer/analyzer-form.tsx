@@ -6,15 +6,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { ResultsPanel } from "./results-panel";
 import { analyzeResume } from "@/lib/analyzer";
 import { AnalysisResult } from "@/lib/types";
-import { Loader2, FileText, Briefcase, RotateCcw, Zap } from "lucide-react";
+import { Loader2, FileText, Briefcase, RotateCcw, Zap, Save, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/components/auth/auth-provider";
 
 export function AnalyzerForm() {
+  const { user } = useAuth();
   const [resume, setResume] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const handleAnalyze = async () => {
     setError("");
@@ -57,6 +61,35 @@ export function AnalyzerForm() {
     setJobDescription("");
     setResult(null);
     setError("");
+    setSaved(false);
+  };
+
+  const handleSave = async () => {
+    if (!result || !user) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/sessions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resumeText: resume,
+          jobDescription,
+          matchScore: result.matchScore,
+          missingKeywords: result.missingKeywords,
+          presentKeywords: result.presentKeywords,
+          weakSections: result.weakSections,
+          rejectionRisk: result.rejectionRisk,
+          suggestions: result.suggestions,
+        }),
+      });
+      if (res.ok) {
+        setSaved(true);
+      }
+    } catch {
+      // Silent fail for save
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -148,15 +181,34 @@ export function AnalyzerForm() {
               )}
             </Button>
             {result && (
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={handleReset}
-                className="gap-2"
-              >
-                <RotateCcw size={16} />
-                Reset
-              </Button>
+              <>
+                {user && (
+                  <Button
+                    size="lg"
+                    variant={saved ? "secondary" : "outline"}
+                    onClick={handleSave}
+                    disabled={saving || saved}
+                    className="gap-2"
+                  >
+                    {saved ? (
+                      <><Check size={16} className="text-emerald-400" /> Saved</>
+                    ) : saving ? (
+                      <><Loader2 size={16} className="animate-spin" /> Saving...</>
+                    ) : (
+                      <><Save size={16} /> Save</>
+                    )}
+                  </Button>
+                )}
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  onClick={handleReset}
+                  className="gap-2"
+                >
+                  <RotateCcw size={16} />
+                  Reset
+                </Button>
+              </>
             )}
           </motion.div>
         </div>

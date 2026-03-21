@@ -218,7 +218,7 @@ src/
 - Loading states for AI requests
 
 ### What is pending
-- [ ] Phase 6: Supabase integration (save sessions, optional auth)
+- [x] Phase 6: Supabase integration (save sessions, optional auth)
 
 ### Setup required
 To enable AI features, the user must:
@@ -226,3 +226,69 @@ To enable AI features, the user must:
 2. Create a free API key
 3. Create `.env.local` in the project root with: `GROQ_API_KEY=gsk_your_key_here`
 4. Restart the dev server
+
+---
+
+## Phase 6: Supabase Integration (Auth + Sessions) ✅
+**Date:** 2026-03-21
+
+### What was built
+- **Supabase client setup** — browser client (`@supabase/ssr`) + server client for API routes
+- **Auth system** — email/password + GitHub OAuth sign-in/sign-up
+- **AuthProvider** — React context wrapping the entire app, provides `user`, `loading`, `signOut`
+- **AuthModal** — polished modal with email form + GitHub OAuth button, sign-in/sign-up toggle
+- **UserMenu** — shows sign-in button when logged out, user email + history link + sign-out when logged in
+- **Middleware** — refreshes Supabase auth sessions on every request
+- **Session saving** — "Save" button appears after analysis (only when signed in), saves full results to Supabase
+- **History page** (`/history`) — lists saved sessions with match score, risk level, keyword counts, date, delete
+- **Delete session** — per-session delete with confirmation
+
+### Database schema
+- `analysis_sessions` table with RLS (Row Level Security)
+- Users can only read/write/delete their own sessions
+- Indexed on `user_id` and `created_at`
+
+### API routes
+- `POST /api/sessions` — save a new analysis session
+- `GET /api/sessions` — get user's analysis history (latest 20)
+- `DELETE /api/sessions/[id]` — delete a specific session
+- `GET /auth/callback` — OAuth callback handler
+
+### New files
+```
+src/
+├── middleware.ts                      # Supabase auth session refresh
+├── lib/supabase/
+│   ├── client.ts                     # Browser Supabase client
+│   └── server.ts                     # Server-side Supabase client
+├── components/auth/
+│   ├── auth-provider.tsx             # Auth context + useAuth hook
+│   ├── auth-modal.tsx                # Sign-in/sign-up modal
+│   └── user-menu.tsx                 # User controls in header
+├── app/
+│   ├── auth/callback/route.ts        # OAuth callback
+│   ├── api/sessions/route.ts         # Save + list sessions
+│   ├── api/sessions/[id]/route.ts    # Delete session
+│   └── history/page.tsx              # Session history page
+supabase/
+└── schema.sql                        # Database schema (run in SQL Editor)
+```
+
+### Key decisions
+- **@supabase/ssr** over `@supabase/auth-helpers-nextjs` — official recommended approach for App Router
+- **RLS policies** — security at the database level, not just API level
+- **Save is optional** — analysis works without auth, save button only appears when signed in
+- **Graceful degradation** — entire app works without Supabase if env vars are missing
+
+### What is working
+- Email/password authentication (sign up, sign in, sign out)
+- GitHub OAuth (if configured in Supabase dashboard)
+- Save analysis sessions after running analysis
+- View session history at /history
+- Delete individual sessions
+- Auth state persists across page reloads
+- All pages responsive and mobile-friendly
+
+### What is pending
+- [ ] Polish UI + final touches
+- [ ] Vercel deployment
