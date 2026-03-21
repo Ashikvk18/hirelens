@@ -350,3 +350,25 @@ src/
 ### What is pending
 - [ ] Polish UI + final touches
 - [ ] Vercel deployment
+
+---
+
+## Bugfix: PDF Parsing Failure
+**Date:** 2026-03-21
+
+### Root cause
+- `pdf-parse` v2 has a completely different API (class-based `PDFParse`) — not the simple function from v1
+- `pdfjs-dist` also failed because `GlobalWorkerOptions.workerSrc` cannot be set to empty string in server-side Node.js
+
+### Fix applied
+- Replaced both with **`unpdf`** — a lightweight, server-friendly PDF text extractor that works out of the box
+- `POST /api/parse-resume` now uses `extractText()` from `unpdf`
+
+### Dependencies changed
+- Removed: `pdf-parse`, `pdfjs-dist`
+- Added: `unpdf`
+
+### Status
+- PDF upload ✅ working
+- DOCX upload ✅ working (mammoth)
+- TXT upload ✅ working
