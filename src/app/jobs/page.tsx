@@ -257,37 +257,39 @@ export default function JobsPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+      <header className="sticky top-0 z-50 border-b border-white/[0.04] bg-background/70 backdrop-blur-2xl backdrop-saturate-150">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={14} />
             Home
           </Link>
-          <div className="flex items-center gap-2">
-            <Briefcase size={16} className="text-primary" />
-            <span className="text-sm font-semibold">Job Board</span>
+          <div className="flex items-center gap-1.5">
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-primary to-accent">
+              <Briefcase size={11} className="text-white" />
+            </div>
+            <span className="text-[13px] font-bold tracking-tight">Job Board</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
             <Link
               href="/applications"
-              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12px] text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
             >
-              <ClipboardList size={14} />
+              <ClipboardList size={13} />
               <span className="hidden sm:inline">Applications</span>
               {appliedJobIds.size > 0 && (
-                <span className="rounded-full bg-primary/20 px-1.5 py-0.5 text-[10px] font-bold text-primary">
+                <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-primary/20 px-1 text-[10px] font-bold text-primary">
                   {appliedJobIds.size}
                 </span>
               )}
             </Link>
             <Link
               href="/profile"
-              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12px] text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
             >
-              <User size={14} />
+              <User size={13} />
               <span className="hidden sm:inline">Profile</span>
             </Link>
           </div>

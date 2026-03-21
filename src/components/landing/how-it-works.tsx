@@ -29,42 +29,61 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="px-4 py-24">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-16 text-center">
-          <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            How it works
-          </h2>
-          <p className="mx-auto max-w-xl text-muted-foreground">
-            Three simple steps to understand exactly where you stand.
-          </p>
-        </div>
+    <section id="how-it-works" className="relative px-4 py-28">
+      {/* Subtle background accent */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.04] blur-[120px]" />
+      </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
+      <div className="relative mx-auto max-w-5xl">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-14 text-center"
+        >
+          <p className="mb-3 text-[13px] font-semibold uppercase tracking-widest text-primary">
+            How It Works
+          </p>
+          <h2 className="mb-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            Three simple steps
+          </h2>
+          <p className="mx-auto max-w-xl text-[15px] leading-relaxed text-muted-foreground">
+            Understand exactly where you stand — in seconds.
+          </p>
+        </motion.div>
+
+        <div className="grid gap-6 md:grid-cols-3">
           {steps.map((s, i) => (
             <motion.div
               key={s.step}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.12 }}
-              className="relative text-center"
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              className="group relative"
             >
-              {/* Connector line (desktop only) */}
+              {/* Connector line */}
               {i < steps.length - 1 && (
-                <div className="absolute right-0 top-10 hidden h-px w-full translate-x-1/2 bg-gradient-to-r from-border to-transparent md:block" />
+                <div className="absolute right-0 top-9 hidden h-px w-full translate-x-1/2 md:block">
+                  <div className="h-full w-full bg-gradient-to-r from-border via-border/50 to-transparent" />
+                </div>
               )}
 
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-card">
-                <s.icon size={24} className="text-primary" />
+              <div className="relative rounded-2xl border border-white/[0.04] bg-card/30 p-6 text-center transition-all duration-300 hover:border-white/[0.08] hover:bg-card/50">
+                {/* Step number */}
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-0.5 text-[11px] font-bold text-white shadow-lg shadow-primary/30">
+                  {s.step}
+                </div>
+
+                <div className="mx-auto mb-4 mt-2 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03] text-primary transition-colors group-hover:bg-white/[0.05]">
+                  <s.icon size={24} />
+                </div>
+                <h3 className="mb-2 text-[15px] font-semibold">{s.title}</h3>
+                <p className="text-[13px] leading-relaxed text-muted-foreground">
+                  {s.description}
+                </p>
               </div>
-              <span className="mb-2 block text-xs font-semibold uppercase tracking-widest text-primary">
-                Step {s.step}
-              </span>
-              <h3 className="mb-2 text-lg font-semibold">{s.title}</h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                {s.description}
-              </p>
             </motion.div>
           ))}
         </div>

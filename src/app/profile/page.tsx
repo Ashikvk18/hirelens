@@ -171,28 +171,33 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
+      <header className="sticky top-0 z-50 border-b border-white/[0.04] bg-background/70 backdrop-blur-2xl backdrop-saturate-150">
+        <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4 sm:px-6">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={14} />
             Back
           </Link>
-          <span className="text-sm font-semibold">My Profile</span>
+          <div className="flex items-center gap-1.5">
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-primary to-accent">
+              <User size={11} className="text-white" />
+            </div>
+            <span className="text-[13px] font-bold tracking-tight">My Profile</span>
+          </div>
           <Button
             size="sm"
             onClick={handleSave}
             disabled={saving}
-            className="gap-1.5"
+            className="h-8 gap-1.5 text-[13px]"
           >
             {saved ? (
-              <><Check size={14} className="text-emerald-400" /> Saved</>
+              <><Check size={13} className="text-emerald-400" /> Saved</>
             ) : saving ? (
-              <><Loader2 size={14} className="animate-spin" /> Saving</>
+              <><Loader2 size={13} className="animate-spin" /> Saving</>
             ) : (
-              <><Save size={14} /> Save</>
+              <><Save size={13} /> Save</>
             )}
           </Button>
         </div>
