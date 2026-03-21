@@ -68,8 +68,8 @@ HireLens/
 - Dev server running on localhost:3000
 
 ### What is pending
-- [ ] Phase 3: Build analyzer page UI (resume input, JD input, results panel)
-- [ ] Phase 4: Implement analysis logic (keyword matching, scoring)
+- [x] Phase 3: Build analyzer page UI (resume input, JD input, results panel)
+- [x] Phase 4: Implement analysis logic (keyword matching, scoring)
 - [ ] Phase 5: AI features (resume suggestions, outreach generation)
 - [ ] Phase 6: Supabase integration (save sessions, optional auth)
 
@@ -91,3 +91,80 @@ HireLens/
 - Subtle background blur gradients
 - Staggered Framer Motion animations on scroll
 - Fully responsive (mobile hamburger menu, stacked layouts)
+
+---
+
+## Phase 3 & 4: Analyzer Page UI + Analysis Logic ✅
+**Date:** 2026-03-21
+
+### What was built
+- **Analyzer Page** (`/analyze`) — full interactive resume analysis tool
+- **AnalyzerForm** — two-panel layout: resume + JD inputs (left), results (right)
+- **ResultsPanel** — displays all analysis results with animated sections
+- **ScoreRing** — animated SVG circular progress indicator for match score
+- **Analysis Engine** (`lib/analyzer.ts`) — keyword extraction, scoring, weak section detection, rejection risk calculation
+
+### New UI components
+- `Textarea` — styled textarea with focus ring and dark theme
+- `Badge` — multi-variant badge (default, success, warning, destructive, outline)
+- `Progress` — animated progress bar with custom indicator color
+
+### Analysis engine features
+- **Keyword extraction** across 7 categories: programming, frameworks, cloud, data, databases, soft skills, general
+- **Match scoring** — ratio of matched keywords + structure bonus
+- **Weak section detection** — checks for education, experience, skills, projects, quantified achievements, action verbs
+- **Rejection risk** — composite score from missing keyword ratio + critical weak sections
+- **Improvement suggestions** — auto-generated based on gaps found
+
+### Updated folder structure
+```
+src/
+├── app/
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx                    # Landing page
+│   └── analyze/
+│       └── page.tsx                # Analyzer page (full UI)
+├── components/
+│   ├── ui/
+│   │   ├── button.tsx
+│   │   ├── textarea.tsx
+│   │   ├── badge.tsx
+│   │   └── progress.tsx
+│   ├── landing/
+│   │   ├── navbar.tsx
+│   │   ├── hero.tsx
+│   │   ├── features.tsx
+│   │   ├── how-it-works.tsx
+│   │   ├── cta.tsx
+│   │   └── footer.tsx
+│   └── analyzer/
+│       ├── analyzer-form.tsx       # Main form with inputs + state management
+│       ├── results-panel.tsx       # Full results display (keywords, risk, suggestions)
+│       └── score-ring.tsx          # Animated circular score indicator
+└── lib/
+    ├── utils.ts
+    ├── types.ts                    # AnalysisResult, WeakSection, RejectionRisk types
+    └── analyzer.ts                 # Core analysis engine (keyword matching, scoring)
+```
+
+### Key decisions
+- **Client-side analysis** for Phase 4 — instant results, no API needed, zero latency
+- **Animated score ring** with color coding (green/amber/red) for immediate visual feedback
+- **Staggered card animations** in results for polished feel
+- **Input validation** with error messages (min length checks)
+- **Loading state** with 1.2s simulated delay for better UX perception
+
+### What is working
+- Full end-to-end flow: paste resume + JD → analyze → see results
+- Match score with animated ring
+- Keyword analysis (found vs missing)
+- Rejection risk with progress bar and reasons
+- Weak section detection with severity badges
+- AI improvement suggestions
+- Reset functionality
+- Responsive layout (stacked on mobile, side-by-side on desktop)
+
+### What is pending
+- [ ] Phase 5: AI features (LLM-powered resume rewriting, outreach messages)
+- [ ] Phase 6: Supabase integration (save sessions, optional auth)
