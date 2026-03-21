@@ -29,6 +29,8 @@ import {
   Phone,
   Shield,
   UserSearch,
+  BookOpen,
+  Route,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -553,6 +555,24 @@ export default function JobsPage() {
                                   {skill}
                                 </span>
                               ))}
+                            </div>
+
+                            {/* Action links */}
+                            <div className="mt-2.5 flex flex-wrap gap-2">
+                              <Link
+                                href={`/interview-prep?title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.company)}&skills=${encodeURIComponent(job.skills.join(","))}`}
+                                className="inline-flex items-center gap-1.5 rounded-md bg-white/[0.03] px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
+                              >
+                                <BookOpen size={11} />
+                                Interview Prep
+                              </Link>
+                              <Link
+                                href={`/skills-roadmap?title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.company)}&skills=${encodeURIComponent(job.skills.join(","))}`}
+                                className="inline-flex items-center gap-1.5 rounded-md bg-white/[0.03] px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
+                              >
+                                <Route size={11} />
+                                Skills Roadmap
+                              </Link>
                             </div>
                           </div>
                         </div>
