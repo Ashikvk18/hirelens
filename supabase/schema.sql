@@ -73,3 +73,46 @@ CREATE POLICY "Users can update their own profile"
   USING (auth.uid() = user_id);
 
 CREATE INDEX IF NOT EXISTS idx_profiles_user_id ON user_profiles(user_id);
+
+-- ============================================================
+-- Job Applications tracking table
+-- ============================================================
+CREATE TABLE IF NOT EXISTS job_applications (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  job_id TEXT NOT NULL,
+  job_title TEXT NOT NULL,
+  company TEXT NOT NULL,
+  company_logo TEXT,
+  location TEXT DEFAULT '',
+  job_type TEXT DEFAULT '',
+  apply_link TEXT NOT NULL,
+  publisher TEXT DEFAULT '',
+  salary TEXT DEFAULT '',
+  resume_text TEXT DEFAULT '',
+  status TEXT NOT NULL DEFAULT 'applied', -- applied, interviewing, offered, rejected, withdrawn
+  notes TEXT DEFAULT '',
+  applied_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE job_applications ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view their own applications"
+  ON job_applications FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own applications"
+  ON job_applications FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own applications"
+  ON job_applications FOR UPDATE
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own applications"
+  ON job_applications FOR DELETE
+  USING (auth.uid() = user_id);
+
+CREATE INDEX IF NOT EXISTS idx_applications_user_id ON job_applications(user_id);
+CREATE INDEX IF NOT EXISTS idx_applications_applied_at ON job_applications(applied_at DESC);

@@ -441,3 +441,58 @@ src/
 ### What is pending
 - [ ] Polish UI + final touches
 - [ ] Vercel deployment
+
+---
+
+## Feature: Application Tracking + Forced Profile Setup ✅
+**Date:** 2026-03-21
+
+### What was built
+
+#### Forced Profile Setup
+- After sign-up, users must complete their profile before accessing Jobs or Applications
+- `/jobs` page redirects to `/profile` if no profile exists
+- Sign-up email redirect goes to `/profile` page
+
+#### Application Tracking System
+- **Apply & Track modal** on job board — when clicking Apply:
+  1. Modal opens asking for resume text (optional)
+  2. Saves application to Supabase with job details + resume used
+  3. Opens the job posting in a new tab
+  4. Job card shows green "Applied" badge
+  5. "Skip Tracking" option to just open the link without saving
+- **Applications dashboard** (`/applications`) with:
+  - Stats bar: Total, Applied, Interviewing, Offered, Rejected
+  - Filter tabs by status
+  - Expandable cards showing:
+    - Status updater (Applied → Interviewing → Offered → Rejected → Withdrawn)
+    - Resume text used for that specific application
+    - Notes field (auto-saves on blur)
+    - Link to original job posting
+    - Delete option
+
+#### Navigation
+- Navbar (desktop + mobile) now shows: Jobs, Applications, Profile, Sign Out
+- Jobs page header shows Applications link with count badge
+
+### New files
+```
+src/
+├── app/
+│   ├── applications/page.tsx             # Application tracker dashboard
+│   └── api/
+│       ├── applications/route.ts         # GET/POST applications
+│       └── applications/[id]/route.ts    # PATCH/DELETE individual application
+```
+
+### Database
+- New `job_applications` table with RLS policies
+- Columns: job_id, job_title, company, logo, location, type, apply_link, publisher, salary, resume_text, status, notes, applied_at
+
+### User flow
+1. Sign up → forced to set up profile first
+2. Browse jobs → click Apply → paste resume (optional) → Apply & Track
+3. Job opens in new tab, application saved to tracker
+4. Go to Applications → see all tracked jobs with statuses
+5. Update status as you progress (Applied → Interviewing → Offered)
+6. Add notes per application, view which resume was used

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Briefcase, User } from "lucide-react";
+import { Menu, X, Briefcase, User, ClipboardList } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/auth/auth-provider";
@@ -49,6 +49,13 @@ export function Navbar() {
                 >
                   <Briefcase size={14} />
                   Jobs
+                </Link>
+                <Link
+                  href="/applications"
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <ClipboardList size={14} />
+                  Applications
                 </Link>
                 <Link
                   href="/profile"
@@ -118,6 +125,14 @@ export function Navbar() {
                     >
                       <Briefcase size={14} />
                       Jobs For You
+                    </Link>
+                    <Link
+                      href="/applications"
+                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <ClipboardList size={14} />
+                      My Applications
                     </Link>
                     <Link
                       href="/profile"
