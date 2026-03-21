@@ -496,3 +496,38 @@ src/
 4. Go to Applications → see all tracked jobs with statuses
 5. Update status as you progress (Applied → Interviewing → Offered)
 6. Add notes per application, view which resume was used
+
+---
+
+## Feature: Hiring Contact Finder ✅
+**Date:** 2026-03-21
+
+### What was built
+
+#### Contact Finder (Hunter.io Integration)
+- **Find Contacts** button on every job card (person-search icon)
+- Clicking it opens a modal that queries Hunter.io for emails at that company
+- Prioritizes HR/recruiting department contacts
+- Falls back to all departments if no HR contacts found
+- Each contact card shows:
+  - Name, position, department, seniority
+  - Confidence score (color-coded: green ≥80%, yellow ≥50%, red <50%)
+  - Clickable email link (opens mailto:)
+  - LinkedIn profile link (if available)
+  - Phone number (if available)
+
+### New files
+```
+src/app/api/contacts/route.ts   # Hunter.io domain-search API integration
+```
+
+### Modified files
+```
+src/app/jobs/page.tsx            # Added contact finder button + modal
+.env.example                     # Added HUNTER_API_KEY
+```
+
+### Setup required
+- Get a free Hunter.io API key at https://hunter.io/api-keys
+- Add `HUNTER_API_KEY=your_key_here` to `.env.local`
+- Free tier: 25 searches/month

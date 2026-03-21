@@ -24,6 +24,11 @@ import {
   CheckCircle2,
   X,
   ClipboardList,
+  Mail,
+  Linkedin,
+  Phone,
+  Shield,
+  UserSearch,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -42,6 +47,20 @@ interface Job {
   salary: string;
   publisher: string;
   skills: string[];
+}
+
+interface Contact {
+  email: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  position: string;
+  department: string;
+  seniority: string;
+  confidence: number;
+  linkedin: string | null;
+  twitter: string | null;
+  phone: string | null;
 }
 
 interface UserProfile {
@@ -70,6 +89,11 @@ export default function JobsPage() {
   const [resumeText, setResumeText] = useState("");
   const [applying, setApplying] = useState(false);
   const [appliedJobIds, setAppliedJobIds] = useState<Set<string>>(new Set());
+  const [contactJob, setContactJob] = useState<Job | null>(null);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contactsLoading, setContactsLoading] = useState(false);
+  const [contactsError, setContactsError] = useState("");
+  const [contactsDomain, setContactsDomain] = useState("");
 
   // Redirect if not logged in
   useEffect(() => {
@@ -142,6 +166,33 @@ export default function JobsPage() {
       window.open(applyingJob.applyLink, "_blank");
     } finally {
       setApplying(false);
+    }
+  };
+
+  const fetchContacts = async (job: Job) => {
+    setContactJob(job);
+    setContacts([]);
+    setContactsError("");
+    setContactsDomain("");
+    setContactsLoading(true);
+    try {
+      const res = await fetch(`/api/contacts?company=${encodeURIComponent(job.company)}`);
+      const data = await res.json();
+      if (data.error) {
+        setContactsError(data.error);
+      } else {
+        setContacts(data.contacts || []);
+        setContactsDomain(data.domain || "");
+        if ((data.contacts || []).length === 0) {
+          setContactsError(
+            data.message || "No contacts found for this company. Try a larger or more well-known company."
+          );
+        }
+      }
+    } catch {
+      setContactsError("Failed to fetch contacts. Please try again.");
+    } finally {
+      setContactsLoading(false);
     }
   };
 
@@ -426,21 +477,30 @@ export default function JobsPage() {
                                 </h3>
                                 <p className="text-sm text-muted-foreground">{job.company}</p>
                               </div>
-                              {isApplied ? (
-                                <span className="flex items-center gap-1 rounded-full bg-emerald-400/10 px-2.5 py-1 text-[10px] font-semibold text-emerald-400 shrink-0">
-                                  <CheckCircle2 size={10} />
-                                  Applied
-                                </span>
-                              ) : (
-                                <Button
-                                  size="sm"
-                                  onClick={() => setApplyingJob(job)}
-                                  className="shrink-0 gap-1.5 text-xs"
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                <button
+                                  onClick={() => fetchContacts(job)}
+                                  className="rounded-lg border border-border bg-secondary/50 p-1.5 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                                  title="Find hiring contacts"
                                 >
-                                  <ExternalLink size={12} />
-                                  Apply
-                                </Button>
-                              )}
+                                  <UserSearch size={14} />
+                                </button>
+                                {isApplied ? (
+                                  <span className="flex items-center gap-1 rounded-full bg-emerald-400/10 px-2.5 py-1 text-[10px] font-semibold text-emerald-400">
+                                    <CheckCircle2 size={10} />
+                                    Applied
+                                  </span>
+                                ) : (
+                                  <Button
+                                    size="sm"
+                                    onClick={() => setApplyingJob(job)}
+                                    className="gap-1.5 text-xs"
+                                  >
+                                    <ExternalLink size={12} />
+                                    Apply
+                                  </Button>
+                                )}
+                              </div>
                             </div>
 
                             {/* Meta row */}
@@ -578,6 +638,157 @@ export default function JobsPage() {
 
                 <p className="text-[11px] text-muted-foreground text-center">
                   This will save the job to your applications tracker and open the job posting.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Contacts Modal */}
+      <AnimatePresence>
+        {contactJob && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={() => { setContactJob(null); setContacts([]); setContactsError(""); }}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-xl max-h-[80vh] flex flex-col rounded-xl border border-border bg-background shadow-2xl"
+            >
+              {/* Modal header */}
+              <div className="flex items-start justify-between p-5 pb-3 border-b border-border">
+                <div>
+                  <h2 className="text-lg font-semibold flex items-center gap-2">
+                    <UserSearch size={18} className="text-primary" />
+                    Hiring Contacts
+                  </h2>
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    {contactJob.company}
+                    {contactsDomain && (
+                      <span className="ml-1 text-xs opacity-60">({contactsDomain})</span>
+                    )}
+                  </p>
+                </div>
+                <button
+                  onClick={() => { setContactJob(null); setContacts([]); setContactsError(""); }}
+                  className="rounded-md p-1 hover:bg-secondary/50"
+                >
+                  <X size={16} className="text-muted-foreground" />
+                </button>
+              </div>
+
+              {/* Modal body */}
+              <div className="flex-1 overflow-y-auto p-5">
+                {contactsLoading && (
+                  <div className="flex flex-col items-center justify-center py-12">
+                    <Loader2 size={24} className="mb-3 animate-spin text-primary" />
+                    <p className="text-sm text-muted-foreground">
+                      Searching for contacts at {contactJob.company}...
+                    </p>
+                  </div>
+                )}
+
+                {contactsError && !contactsLoading && (
+                  <div className="rounded-lg bg-yellow-500/10 p-4 text-sm text-yellow-400">
+                    {contactsError}
+                  </div>
+                )}
+
+                {!contactsLoading && contacts.length > 0 && (
+                  <div className="space-y-3">
+                    <p className="text-xs text-muted-foreground mb-2">
+                      {contacts.length} contact{contacts.length !== 1 ? "s" : ""} found — sorted by relevance to hiring
+                    </p>
+                    {contacts.map((c, i) => (
+                      <motion.div
+                        key={c.email}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.03 }}
+                        className="rounded-lg border border-border bg-card/50 p-4"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-sm">{c.fullName}</p>
+                            {c.position && (
+                              <p className="text-xs text-muted-foreground mt-0.5">{c.position}</p>
+                            )}
+                            {(c.department || c.seniority) && (
+                              <p className="text-[11px] text-muted-foreground mt-0.5">
+                                {[c.department?.replace(/_/g, " "), c.seniority].filter(Boolean).join(" · ")}
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Shield
+                              size={12}
+                              className={
+                                c.confidence >= 80
+                                  ? "text-emerald-400"
+                                  : c.confidence >= 50
+                                  ? "text-yellow-400"
+                                  : "text-red-400"
+                              }
+                            />
+                            <span className="text-[10px] text-muted-foreground">
+                              {c.confidence}%
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <a
+                            href={`mailto:${c.email}`}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-2.5 py-1.5 text-xs font-medium text-primary hover:bg-primary/20 transition-colors"
+                          >
+                            <Mail size={11} />
+                            {c.email}
+                          </a>
+                          {c.linkedin && (
+                            <a
+                              href={c.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-md bg-blue-500/10 px-2.5 py-1.5 text-xs font-medium text-blue-400 hover:bg-blue-500/20 transition-colors"
+                            >
+                              <Linkedin size={11} />
+                              LinkedIn
+                            </a>
+                          )}
+                          {c.phone && (
+                            <a
+                              href={`tel:${c.phone}`}
+                              className="inline-flex items-center gap-1.5 rounded-md bg-secondary/80 px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                              <Phone size={11} />
+                              {c.phone}
+                            </a>
+                          )}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+
+                {!contactsLoading && contacts.length === 0 && !contactsError && (
+                  <div className="text-center py-8">
+                    <Mail size={28} className="mx-auto mb-2 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">Searching...</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal footer */}
+              <div className="border-t border-border px-5 py-3">
+                <p className="text-[10px] text-muted-foreground text-center">
+                  Contact data powered by Hunter.io. Confidence score indicates email verification likelihood.
                 </p>
               </div>
             </motion.div>
