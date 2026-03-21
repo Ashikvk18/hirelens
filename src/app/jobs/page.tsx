@@ -57,6 +57,7 @@ export default function JobsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profileLoaded, setProfileLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
   const [dateFilter, setDateFilter] = useState("month");
@@ -85,7 +86,8 @@ export default function JobsPage() {
           if (locs.length > 0) setSearchLocation(locs[0]);
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setProfileLoaded(true));
   }, [user]);
 
   const fetchJobs = useCallback(
@@ -124,12 +126,12 @@ export default function JobsPage() {
     [searchQuery, searchLocation, dateFilter, profile]
   );
 
-  // Fetch jobs when profile is loaded
+  // Fetch jobs when profile fetch is done
   useEffect(() => {
-    if (profile !== null) {
+    if (profileLoaded) {
       fetchJobs();
     }
-  }, [profile, fetchJobs]);
+  }, [profileLoaded, fetchJobs]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
