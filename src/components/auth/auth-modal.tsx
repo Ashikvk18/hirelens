@@ -32,7 +32,7 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/analyze`,
+            emailRedirectTo: `${window.location.origin}/profile`,
           },
         });
         if (error) throw error;

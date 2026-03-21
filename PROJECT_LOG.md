@@ -372,3 +372,72 @@ src/
 - PDF upload ✅ working
 - DOCX upload ✅ working (mammoth)
 - TXT upload ✅ working
+
+---
+
+## Feature: Personalized Job Board + User Profiles ✅
+**Date:** 2026-03-21
+
+### What was built
+
+#### User Authentication (re-enabled)
+- `AuthProvider` restored in root layout
+- Sign In / Sign Up modal in navbar with GitHub OAuth + email/password
+- Auth state available across all pages
+
+#### User Profile System
+- **Profile page** (`/profile`) — full setup form with:
+  - Personal info (name, email)
+  - Education (university, major, degree level, graduation year)
+  - Skills (tag input + popular skill suggestions)
+  - Job preferences (experience level, job type, preferred roles, preferred locations)
+- **Profile API** (`/api/profile`) — GET/POST with Supabase upsert
+- **Supabase table** `user_profiles` with RLS policies
+
+#### Personalized Job Board
+- **Jobs page** (`/jobs`) — personalized job listings powered by JSearch (RapidAPI)
+- Real job postings from LinkedIn, Indeed, Glassdoor, etc.
+- Each job card shows:
+  - Job title, company name, company logo
+  - Location + remote badge
+  - Posted date (e.g. "2 days ago")
+  - Estimated applicant count
+  - Salary range (when available)
+  - Job type tag + publisher source + required skills
+- **Click any job → opens the apply page** on the original platform
+- Search bar with keyword + location inputs
+- Date filter (Today, 3 days, This week, This month, All time)
+- Refresh button to fetch latest jobs
+- Pre-fills search from user's profile (preferred roles + locations)
+
+#### Navigation Updates
+- Navbar shows **Jobs** and **Profile** links when signed in
+- Shows **Sign In** button when signed out
+- Sign Out button for logged-in users
+- Mobile menu updated with all new links
+
+### New files
+```
+src/
+├── app/
+│   ├── profile/page.tsx              # User profile setup page
+│   ├── jobs/page.tsx                 # Personalized job board
+│   └── api/
+│       ├── profile/route.ts          # Profile GET/POST API
+│       └── jobs/route.ts             # JSearch job listings API
+```
+
+### New dependencies
+- JSearch API via RapidAPI (`RAPIDAPI_KEY` env var)
+
+### User flow
+1. Land on homepage → click **Sign In** → create account
+2. Redirected to **Profile** → fill in major, skills, preferred roles & locations
+3. Click **View Jobs** → see personalized job listings
+4. Click any job → opens apply page on LinkedIn/Indeed/Glassdoor
+5. Use search bar + filters to refine results
+6. Hit refresh to get latest postings
+
+### What is pending
+- [ ] Polish UI + final touches
+- [ ] Vercel deployment
