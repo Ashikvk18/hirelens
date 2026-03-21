@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { extractText } from "unpdf";
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,16 +21,14 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     let text = "";
 
-    if (file.name.endsWith(".pdf")) {
-      const pdfParse = await import("pdf-parse");
-      const parseFn = (pdfParse as unknown as { default: (buf: Buffer) => Promise<{ text: string }> }).default || pdfParse;
-      const data = await (parseFn as (buf: Buffer) => Promise<{ text: string }>)(buffer);
-      text = data.text;
-    } else if (file.name.endsWith(".docx")) {
+    if (file.name.toLowerCase().endsWith(".pdf")) {
+      const result = await extractText(new Uint8Array(buffer));
+      text = Array.isArray(result.text) ? result.text.join("\n") : String(result.text);
+    } else if (file.name.toLowerCase().endsWith(".docx")) {
       const mammoth = await import("mammoth");
       const result = await mammoth.extractRawText({ buffer });
       text = result.value;
-    } else if (file.name.endsWith(".txt")) {
+    } else if (file.name.toLowerCase().endsWith(".txt")) {
       text = buffer.toString("utf-8");
     } else {
       return NextResponse.json(
