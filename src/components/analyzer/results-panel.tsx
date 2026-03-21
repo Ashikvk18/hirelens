@@ -5,6 +5,7 @@ import { ScoreRing } from "./score-ring";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { AISuggestions } from "./ai-suggestions";
+import { ResumeRewriter } from "./resume-rewriter";
 import { OutreachGenerator } from "./outreach-generator";
 import {
   AlertTriangle,
@@ -204,6 +205,13 @@ export function ResultsPanel({ result, resume, jobDescription }: ResultsPanelPro
           ))}
         </ul>
       </motion.div>
+
+      {/* AI Resume Rewriter */}
+      <ResumeRewriter
+        resume={resume}
+        jobDescription={jobDescription}
+        missingKeywords={result.missingKeywords}
+      />
 
       {/* AI-Powered Suggestions */}
       <AISuggestions

@@ -6,19 +6,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { ResultsPanel } from "./results-panel";
 import { analyzeResume } from "@/lib/analyzer";
 import { AnalysisResult } from "@/lib/types";
-import { Loader2, FileText, Briefcase, RotateCcw, Zap, Save, Check } from "lucide-react";
+import { Loader2, FileText, Briefcase, RotateCcw, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/components/auth/auth-provider";
+import { FileUpload } from "./file-upload";
 
 export function AnalyzerForm() {
-  const { user } = useAuth();
   const [resume, setResume] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
 
   const handleAnalyze = async () => {
     setError("");
@@ -61,36 +58,8 @@ export function AnalyzerForm() {
     setJobDescription("");
     setResult(null);
     setError("");
-    setSaved(false);
   };
 
-  const handleSave = async () => {
-    if (!result || !user) return;
-    setSaving(true);
-    try {
-      const res = await fetch("/api/sessions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          resumeText: resume,
-          jobDescription,
-          matchScore: result.matchScore,
-          missingKeywords: result.missingKeywords,
-          presentKeywords: result.presentKeywords,
-          weakSections: result.weakSections,
-          rejectionRisk: result.rejectionRisk,
-          suggestions: result.suggestions,
-        }),
-      });
-      if (res.ok) {
-        setSaved(true);
-      }
-    } catch {
-      // Silent fail for save
-    } finally {
-      setSaving(false);
-    }
-  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -108,11 +77,20 @@ export function AnalyzerForm() {
               <FileText size={16} className="text-primary" />
               <h2 className="text-sm font-semibold">Your Resume</h2>
             </div>
+            <FileUpload onTextExtracted={(text) => setResume(text)} />
+            <div className="relative my-3">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card/50 px-2 text-muted-foreground">or paste text</span>
+              </div>
+            </div>
             <Textarea
               placeholder="Paste your resume text here..."
               value={resume}
               onChange={(e) => setResume(e.target.value)}
-              className="min-h-[220px] text-sm leading-relaxed"
+              className="min-h-[180px] text-sm leading-relaxed"
             />
             <p className="mt-2 text-xs text-muted-foreground">
               {resume.split(/\s+/).filter(Boolean).length} words
@@ -181,34 +159,15 @@ export function AnalyzerForm() {
               )}
             </Button>
             {result && (
-              <>
-                {user && (
-                  <Button
-                    size="lg"
-                    variant={saved ? "secondary" : "outline"}
-                    onClick={handleSave}
-                    disabled={saving || saved}
-                    className="gap-2"
-                  >
-                    {saved ? (
-                      <><Check size={16} className="text-emerald-400" /> Saved</>
-                    ) : saving ? (
-                      <><Loader2 size={16} className="animate-spin" /> Saving...</>
-                    ) : (
-                      <><Save size={16} /> Save</>
-                    )}
-                  </Button>
-                )}
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  onClick={handleReset}
-                  className="gap-2"
-                >
-                  <RotateCcw size={16} />
-                  Reset
-                </Button>
-              </>
+              <Button
+                size="lg"
+                variant="secondary"
+                onClick={handleReset}
+                className="gap-2"
+              >
+                <RotateCcw size={16} />
+                Reset
+              </Button>
             )}
           </motion.div>
         </div>

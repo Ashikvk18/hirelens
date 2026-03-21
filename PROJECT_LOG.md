@@ -290,5 +290,63 @@ supabase/
 - All pages responsive and mobile-friendly
 
 ### What is pending
+- [x] File upload + AI resume rewriter
+- [ ] Polish UI + final touches
+- [ ] Vercel deployment
+
+---
+
+## Bugfix: White Screen on Next.js 16
+**Date:** 2026-03-21
+
+### Root cause
+- `middleware.ts` is deprecated in Next.js 16 — was blocking client-side hydration
+- Cross-origin HMR was blocked by default in Next.js 16
+
+### Fixes applied
+- Deleted `src/middleware.ts`
+- Added `allowedDevOrigins` to `next.config.ts`
+- Fixed `AuthProvider` with `useMemo` for stable Supabase client + error handling
+- Temporarily removed `AuthProvider` from root layout (can re-add with error boundary later)
+
+---
+
+## Feature: File Upload + AI Resume Rewriter ✅
+**Date:** 2026-03-21
+
+### What was built
+- **File Upload component** — drag-and-drop or browse for PDF, DOCX, TXT files (max 5MB)
+- **Parse Resume API** (`/api/parse-resume`) — server-side file parsing using `pdf-parse` + `mammoth`
+- **AI Resume Rewriter API** (`/api/ai/rewrite`) — generates 3 different rewrite versions via Groq Llama 3.3
+- **Resume Rewriter UI** — tabbed selector with 3 versions, copy-to-clipboard, regenerate button
+
+### Rewrite versions
+1. **Keyword-Optimized** — maximizes keyword matches while keeping content authentic
+2. **Achievement-Focused** — rewrites bullets to emphasize measurable impact and results
+3. **Skills-Forward** — reorganizes to lead with a skills summary mirroring job requirements
+
+### New dependencies
+- `pdf-parse` — PDF text extraction
+- `mammoth` — DOCX text extraction
+
+### New files
+```
+src/
+├── app/api/
+│   ├── parse-resume/route.ts        # PDF/DOCX/TXT → text extraction
+│   └── ai/rewrite/route.ts          # AI resume rewriter (3 versions)
+├── components/analyzer/
+│   ├── file-upload.tsx               # Drag-and-drop file upload
+│   └── resume-rewriter.tsx           # 3-tab rewrite selector with copy
+```
+
+### User flow
+1. Upload resume (PDF/DOCX/TXT) OR paste text
+2. Paste job description
+3. Click "Analyze Match" → see results
+4. Click "Generate Rewritten Resumes" → get 3 AI-rewritten versions
+5. Select preferred version → copy to clipboard
+
+### What is pending
 - [ ] Polish UI + final touches
 - [ ] Vercel deployment
