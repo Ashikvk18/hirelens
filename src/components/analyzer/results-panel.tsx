@@ -4,6 +4,8 @@ import { AnalysisResult } from "@/lib/types";
 import { ScoreRing } from "./score-ring";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { AISuggestions } from "./ai-suggestions";
+import { OutreachGenerator } from "./outreach-generator";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -16,6 +18,8 @@ import { motion } from "framer-motion";
 
 interface ResultsPanelProps {
   result: AnalysisResult;
+  resume: string;
+  jobDescription: string;
 }
 
 const fadeUp = {
@@ -23,7 +27,7 @@ const fadeUp = {
   animate: { opacity: 1, y: 0 },
 };
 
-export function ResultsPanel({ result }: ResultsPanelProps) {
+export function ResultsPanel({ result, resume, jobDescription }: ResultsPanelProps) {
   const riskColor =
     result.rejectionRisk.level === "high"
       ? "text-red-400"
@@ -200,6 +204,21 @@ export function ResultsPanel({ result }: ResultsPanelProps) {
           ))}
         </ul>
       </motion.div>
+
+      {/* AI-Powered Suggestions */}
+      <AISuggestions
+        resume={resume}
+        jobDescription={jobDescription}
+        missingKeywords={result.missingKeywords}
+        weakSections={result.weakSections}
+      />
+
+      {/* Outreach Message Generator */}
+      <OutreachGenerator
+        resume={resume}
+        jobDescription={jobDescription}
+        matchScore={result.matchScore}
+      />
     </div>
   );
 }

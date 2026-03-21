@@ -186,7 +186,7 @@ export function AnalyzerForm() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <ResultsPanel result={result} />
+                <ResultsPanel result={result} resume={resume} jobDescription={jobDescription} />
               </motion.div>
             )}
 

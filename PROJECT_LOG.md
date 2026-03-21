@@ -166,5 +166,63 @@ src/
 - Responsive layout (stacked on mobile, side-by-side on desktop)
 
 ### What is pending
-- [ ] Phase 5: AI features (LLM-powered resume rewriting, outreach messages)
+- [x] Phase 5: AI features (LLM-powered resume rewriting, outreach messages)
 - [ ] Phase 6: Supabase integration (save sessions, optional auth)
+
+---
+
+## Phase 5: AI Features (Groq + Llama 3) ✅
+**Date:** 2026-03-21
+
+### What was built
+- **Groq API integration** using `groq-sdk` with Llama 3.3 70B Versatile model
+- **AI Suggestions API** (`/api/ai/suggestions`) — generates 5 personalized resume improvement suggestions
+- **Outreach Generator API** (`/api/ai/outreach`) — generates LinkedIn connection request + recruiter email
+- **AISuggestions component** — expandable accordion with copy-to-clipboard, loading states, error handling, regenerate
+- **OutreachGenerator component** — LinkedIn + Email message cards with copy buttons
+
+### Tech used
+- Groq SDK (Llama 3.3 70B Versatile)
+- Next.js API Routes (App Router)
+- Server-side API key handling (never exposed to client)
+
+### API routes
+- `POST /api/ai/suggestions` — accepts resume, JD, missing keywords, weak sections → returns 5 AI suggestions
+- `POST /api/ai/outreach` — accepts resume, JD, match score → returns LinkedIn + email messages
+
+### Key decisions
+- **Groq over OpenAI** — free tier, sub-second inference, perfect for hackathon demos
+- **Llama 3.3 70B** — best quality on Groq's free tier
+- **Server-side only** — API key stays in `.env.local`, never sent to browser
+- **Graceful degradation** — AI features are additive; core analysis works without API key
+- **JSON extraction** — regex-based JSON parsing from LLM output for reliability
+- **Copy to clipboard** — one-click copy on all AI-generated content
+
+### New files
+```
+src/
+├── app/api/ai/
+│   ├── suggestions/route.ts     # AI resume suggestions endpoint
+│   └── outreach/route.ts        # AI outreach message endpoint
+├── components/analyzer/
+│   ├── ai-suggestions.tsx       # Expandable AI suggestions panel
+│   └── outreach-generator.tsx   # LinkedIn + Email message generator
+```
+
+### What is working
+- Full analysis flow with local engine (no API key needed)
+- AI suggestions button appears after analysis (requires GROQ_API_KEY)
+- Outreach message generation (requires GROQ_API_KEY)
+- Copy-to-clipboard on all AI content
+- Error handling + retry for API failures
+- Loading states for AI requests
+
+### What is pending
+- [ ] Phase 6: Supabase integration (save sessions, optional auth)
+
+### Setup required
+To enable AI features, the user must:
+1. Go to https://console.groq.com/keys
+2. Create a free API key
+3. Create `.env.local` in the project root with: `GROQ_API_KEY=gsk_your_key_here`
+4. Restart the dev server
