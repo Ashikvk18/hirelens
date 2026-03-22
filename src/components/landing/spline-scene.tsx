@@ -42,15 +42,19 @@ export function HeroSpline({ sceneUrl }: HeroSplineProps) {
     return () => obs.disconnect();
   }, []);
 
-  // Dynamically import Spline only when we have a URL and are in view
-  useEffect(() => {
-    if (!sceneUrl || !inView) return;
-    let cancelled = false;
-    import("@splinetool/react-spline")
-      .then((mod) => { if (!cancelled) setSplineComponent(() => mod.default); })
-      .catch(() => { /* Spline not installed — fallback will show */ });
-    return () => { cancelled = true; };
-  }, [sceneUrl, inView]);
+  // NOTE: Spline dynamic import is disabled until the package is installed.
+  // To enable:
+  //   1. npm install @splinetool/react-spline
+  //   2. Uncomment the useEffect below
+  //
+  // useEffect(() => {
+  //   if (!sceneUrl || !inView) return;
+  //   let cancelled = false;
+  //   import("@splinetool/react-spline")
+  //     .then((mod) => { if (!cancelled) setSplineComponent(() => mod.default); })
+  //     .catch(() => {});
+  //   return () => { cancelled = true; };
+  // }, [sceneUrl, inView]);
 
   return (
     <div ref={containerRef} className="relative h-full w-full" aria-hidden="true">
