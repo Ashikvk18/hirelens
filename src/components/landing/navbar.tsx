@@ -21,8 +21,17 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { user, loading, signOut } = useAuth();
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-aware background
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -49,13 +58,18 @@ export function Navbar() {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50">
-        <div className="border-b border-white/[0.04] bg-background/70 backdrop-blur-2xl backdrop-saturate-150">
+        <div className={`border-b transition-all duration-500 ${scrolled ? "border-white/[0.06] bg-background/80 backdrop-blur-2xl backdrop-saturate-150 shadow-lg shadow-black/20" : "border-transparent bg-transparent"}`}>
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
             {/* Logo */}
             <Link href="/" className="group flex items-center gap-2.5">
-              <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/20 transition-shadow group-hover:shadow-primary/40">
+              <motion.div
+                whileHover={{ scale: 1.08, rotate: 3 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/20 transition-shadow group-hover:shadow-primary/40"
+              >
                 <Sparkles size={14} className="text-white" />
-              </div>
+              </motion.div>
               <span className="text-lg font-bold tracking-tight">
                 Hire<span className="text-primary">Lens</span>
               </span>

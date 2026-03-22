@@ -109,3 +109,91 @@ html {
 .safe-top {
   padding-top: env(safe-area-inset-top, 0px);
 }
+
+/* ── Premium Animation Keyframes ── */
+
+/* Gentle floating bob */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-delay {
+  animation: float 5s ease-in-out 1s infinite;
+}
+
+/* Breathing glow pulse */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.15), 0 0 60px rgba(124, 58, 237, 0.05); }
+  50% { box-shadow: 0 0 30px rgba(124, 58, 237, 0.3), 0 0 80px rgba(124, 58, 237, 0.1); }
+}
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Shimmer sweep for loading states */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(124, 58, 237, 0.06) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Gradient mesh movement */
+@keyframes gradient-shift {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.98); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+.animate-gradient-shift {
+  animation: gradient-shift 12s ease-in-out infinite;
+}
+.animate-gradient-shift-alt {
+  animation: gradient-shift 15s ease-in-out 2s infinite reverse;
+}
+.animate-gradient-shift-slow {
+  animation: gradient-shift 18s ease-in-out 4s infinite;
+}
+
+/* Subtle spin for decorative elements */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 25s linear infinite;
+}
+
+/* Border glow animation */
+@keyframes border-glow {
+  0%, 100% { border-color: rgba(124, 58, 237, 0.1); }
+  50% { border-color: rgba(124, 58, 237, 0.3); }
+}
+.animate-border-glow {
+  animation: border-glow 3s ease-in-out infinite;
+}
+
+/* Reduced motion: kill all custom animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-float-slow,
+  .animate-float-delay,
+  .animate-glow-pulse,
+  .animate-shimmer,
+  .animate-gradient-shift,
+  .animate-gradient-shift-alt,
+  .animate-gradient-shift-slow,
+  .animate-spin-slow,
+  .animate-border-glow {
+    animation: none !important;
+  }
+}
