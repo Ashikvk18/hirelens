@@ -88,10 +88,14 @@ export function SkillsRadar({ data }: SkillsRadarProps) {
               }}
               itemStyle={{ color: "hsl(142, 71%, 45%)" }}
               labelStyle={{ color: "rgba(255,255,255,0.7)", fontWeight: 600, marginBottom: 4 }}
-              formatter={(value: number, _name: string, entry: { payload: { matched: number; required: number } }) => [
-                `${value}% (${entry.payload.matched}/${entry.payload.required} skills)`,
-                "Coverage",
-              ]}
+              formatter={(value: unknown, _name: unknown, entry: unknown) => {
+                const e = entry as { payload?: { matched?: number; required?: number } };
+                const v = Number(value);
+                return [
+                  `${v}% (${e.payload?.matched ?? 0}/${e.payload?.required ?? 0} skills)`,
+                  "Coverage",
+                ];
+              }}
             />
           </RadarChart>
         </ResponsiveContainer>
