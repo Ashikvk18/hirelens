@@ -33,6 +33,7 @@ import {
   Route,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { scrollBlurUp, scrollFadeUp, scrollStagger, scrollStaggerItemBlur, viewportOnce, viewportOnceEarly } from "@/lib/motion";
 
 interface Job {
   id: string;
@@ -300,7 +301,12 @@ export default function JobsPage() {
 
       <div className="mx-auto max-w-6xl px-4 py-6">
         {/* Title */}
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+        <motion.div
+          variants={scrollBlurUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnceEarly}
+        >
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Jobs For You
           </h1>
@@ -314,9 +320,10 @@ export default function JobsPage() {
         {/* Search Bar */}
         <motion.form
           onSubmit={handleSearch}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
+          variants={scrollFadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnceEarly}
           className="mt-6 flex flex-col gap-3 sm:flex-row"
         >
           <div className="relative flex-1">
@@ -452,15 +459,19 @@ export default function JobsPage() {
                 {jobs.length} jobs found
                 {refreshing && <Loader2 size={12} className="ml-1 inline animate-spin" />}
               </p>
-              <div className="space-y-3">
-                {jobs.map((job, i) => {
+              <motion.div
+                variants={scrollStagger(0.06)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportOnce}
+                className="space-y-3"
+              >
+                {jobs.map((job) => {
                   const isApplied = appliedJobIds.has(job.id);
                   return (
                     <motion.div
                       key={job.id}
-                      initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      transition={{ duration: 0.35, delay: i * 0.04 }}
+                      variants={scrollStaggerItemBlur}
                       whileHover={{ y: -2, transition: { duration: 0.2 } }}
                     >
                       <div
@@ -594,7 +605,7 @@ export default function JobsPage() {
                     </motion.div>
                   );
                 })}
-              </div>
+              </motion.div>
             </>
           )}
         </div>

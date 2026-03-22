@@ -21,6 +21,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { scrollBlurUp, scrollFadeUp, scrollStagger, scrollStaggerItem, viewportOnce, viewportOnceEarly } from "@/lib/motion";
 
 interface MissingSkill {
   skill: string;
@@ -202,7 +203,12 @@ export default function SkillsRoadmapPage() {
 
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
         {/* Title */}
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+        <motion.div
+          variants={scrollBlurUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnceEarly}
+        >
           <h1 className="text-2xl font-extrabold tracking-tight">
             Skills Gap & Learning Roadmap
           </h1>
@@ -216,9 +222,10 @@ export default function SkillsRoadmapPage() {
         {/* Custom search */}
         <motion.form
           onSubmit={handleCustomGenerate}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
+          variants={scrollFadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnceEarly}
           className="mt-5 flex flex-col gap-2 sm:flex-row"
         >
           <input
@@ -264,7 +271,13 @@ export default function SkillsRoadmapPage() {
 
         {/* Results */}
         {roadmap && !loading && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 space-y-6">
+          <motion.div
+            variants={scrollFadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnceEarly}
+            className="mt-6 space-y-6"
+          >
 
             {/* Timeline summary */}
             <div className="flex flex-wrap gap-3">
@@ -289,9 +302,15 @@ export default function SkillsRoadmapPage() {
             </div>
 
             {/* Gap Analysis */}
-            <div className="grid gap-4 sm:grid-cols-2">
+            <motion.div
+              variants={scrollStagger(0.12)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              className="grid gap-4 sm:grid-cols-2"
+            >
               {/* Missing Skills */}
-              <div className="rounded-2xl border border-white/[0.04] bg-card/40 p-5">
+              <motion.div variants={scrollStaggerItem} className="rounded-2xl border border-white/[0.04] bg-card/40 p-5">
                 <h3 className="mb-3 flex items-center gap-2 text-[14px] font-semibold">
                   <AlertTriangle size={15} className="text-amber-400" />
                   Skills to Learn
@@ -309,10 +328,10 @@ export default function SkillsRoadmapPage() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
 
               {/* Strong Skills */}
-              <div className="rounded-2xl border border-white/[0.04] bg-card/40 p-5">
+              <motion.div variants={scrollStaggerItem} className="rounded-2xl border border-white/[0.04] bg-card/40 p-5">
                 <h3 className="mb-3 flex items-center gap-2 text-[14px] font-semibold">
                   <CheckCircle2 size={15} className="text-emerald-400" />
                   Your Strengths
@@ -328,8 +347,8 @@ export default function SkillsRoadmapPage() {
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Learning Roadmap Phases */}
             <div>
@@ -393,13 +412,18 @@ export default function SkillsRoadmapPage() {
                 <FolderGit2 size={16} className="text-emerald-400" />
                 Portfolio Projects
               </h3>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <motion.div
+                variants={scrollStagger(0.07)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportOnce}
+                className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+              >
                 {roadmap.projects.map((p, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
+                    variants={scrollStaggerItem}
+                    whileHover={{ y: -3, transition: { duration: 0.2 } }}
                     className="rounded-2xl border border-white/[0.04] bg-card/40 p-4 transition-colors hover:border-white/[0.08]"
                   >
                     <div className="mb-2 flex items-center justify-between">
@@ -418,7 +442,7 @@ export default function SkillsRoadmapPage() {
                     </div>
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
 
             {/* Certifications */}

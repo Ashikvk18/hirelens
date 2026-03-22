@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { AnalyzerForm } from "@/components/analyzer/analyzer-form";
+import { motion } from "framer-motion";
+import { scrollBlurUp, scrollFadeUp, viewportOnce } from "@/lib/motion";
 
 export default function AnalyzePage() {
   return (
@@ -26,17 +30,30 @@ export default function AnalyzePage() {
       </header>
 
       {/* Page heading */}
-      <div className="mx-auto max-w-7xl px-4 pt-8 pb-2">
+      <motion.div
+        variants={scrollBlurUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        className="mx-auto max-w-7xl px-4 pt-8 pb-2"
+      >
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
           Resume Analyzer
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Paste your resume and a job description to get instant match analysis.
         </p>
-      </div>
+      </motion.div>
 
       {/* Analyzer */}
-      <AnalyzerForm />
+      <motion.div
+        variants={scrollFadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+      >
+        <AnalyzerForm />
+      </motion.div>
     </div>
   );
 }

@@ -17,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { scrollBlurUp, scrollFadeUp, scrollStagger, scrollStaggerItem, viewportOnce, viewportOnceEarly } from "@/lib/motion";
 import Link from "next/link";
 
 const DEGREE_OPTIONS = [
@@ -204,7 +205,12 @@ export default function ProfilePage() {
       </header>
 
       <div className="mx-auto max-w-4xl px-4 py-8">
-        <motion.div initial={{ opacity: 0, y: 16, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.5 }}>
+        <motion.div
+          variants={scrollBlurUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnceEarly}
+        >
           <h1 className="text-2xl font-bold tracking-tight">Set Up Your Profile</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Tell us about yourself so we can find the best jobs for you.
@@ -218,9 +224,10 @@ export default function ProfilePage() {
         <div className="mt-8 space-y-8">
           {/* Personal Info */}
           <motion.section
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+            variants={scrollFadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
             className="rounded-xl border border-border bg-card/50 p-5"
           >
             <div className="mb-4 flex items-center gap-2">
@@ -252,9 +259,10 @@ export default function ProfilePage() {
 
           {/* Education */}
           <motion.section
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
+            variants={scrollFadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
             className="rounded-xl border border-border bg-card/50 p-5"
           >
             <div className="mb-4 flex items-center gap-2">
@@ -311,9 +319,10 @@ export default function ProfilePage() {
 
           {/* Skills */}
           <motion.section
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            variants={scrollFadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
             className="rounded-xl border border-border bg-card/50 p-5"
           >
             <div className="mb-4 flex items-center gap-2">
@@ -373,9 +382,10 @@ export default function ProfilePage() {
 
           {/* Job Preferences */}
           <motion.section
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
+            variants={scrollFadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
             className="rounded-xl border border-border bg-card/50 p-5"
           >
             <div className="mb-4 flex items-center gap-2">
@@ -500,9 +510,10 @@ export default function ProfilePage() {
 
           {/* Save + Go to Jobs */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            variants={scrollFadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
             className="flex gap-3"
           >
             <Button onClick={handleSave} disabled={saving} className="gap-2">

@@ -2,6 +2,7 @@
 
 import { Upload, Cpu, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
+import { scrollBlurUp, scrollFadeUp, viewportOnce } from "@/lib/motion";
 
 const steps = [
   {
@@ -28,11 +29,11 @@ const steps = [
 ];
 
 const stepVariant = {
-  hidden: { opacity: 0, y: 24 },
-  show: (i: number) => ({
+  hidden: { opacity: 0, y: 28 },
+  visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, delay: i * 0.12 },
+    transition: { duration: 0.5, delay: i * 0.15, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
   }),
 };
 
@@ -46,10 +47,10 @@ export function HowItWorks() {
 
       <div className="relative mx-auto max-w-5xl">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45 }}
+          variants={scrollBlurUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
           className="mb-14 text-center"
         >
           <p className="mb-3 text-[13px] font-semibold uppercase tracking-widest text-primary">
@@ -70,8 +71,8 @@ export function HowItWorks() {
               custom={i}
               variants={stepVariant}
               initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-40px" }}
+              whileInView="visible"
+              viewport={viewportOnce}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
               className="group relative"
             >

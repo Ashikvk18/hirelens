@@ -4,15 +4,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Zap } from "lucide-react";
 import { motion } from "framer-motion";
+import { scrollScaleIn, scrollFadeUp, viewportOnce } from "@/lib/motion";
 
 export function CTA() {
   return (
     <section className="px-4 py-28">
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
+        variants={scrollScaleIn}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
         className="mx-auto max-w-4xl"
       >
         <div className="relative overflow-hidden rounded-3xl border border-white/[0.06] bg-card/50 p-10 text-center sm:p-14 md:p-20">
@@ -25,10 +26,10 @@ export function CTA() {
 
           <div className="relative">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.2 }}
+              variants={scrollFadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
               className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-[13px] font-medium text-primary"
             >
               <Zap size={13} className="animate-pulse" />
@@ -36,29 +37,29 @@ export function CTA() {
             </motion.div>
 
             <motion.h2
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              variants={scrollFadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
               className="mb-4 text-3xl font-extrabold tracking-tight sm:text-4xl"
             >
               Ready to improve your chances?
             </motion.h2>
             <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              variants={scrollFadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
               className="mx-auto mb-8 max-w-lg text-[15px] leading-relaxed text-muted-foreground"
             >
               Paste your resume and a job description. Get instant, actionable
               feedback powered by AI — completely free.
             </motion.p>
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.5 }}
+              variants={scrollFadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
             >
               <Link href="/analyze">
                 <Button

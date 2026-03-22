@@ -9,6 +9,7 @@ import {
   Zap,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { scrollBlurUp, scrollStagger, scrollStaggerItem, viewportOnce } from "@/lib/motion";
 
 const features = [
   {
@@ -67,15 +68,8 @@ const features = [
   },
 ];
 
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.07 } },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-};
+const container = scrollStagger(0.08);
+const item = scrollStaggerItem;
 
 export function Features() {
   return (
@@ -87,10 +81,10 @@ export function Features() {
 
       <div className="relative mx-auto max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45 }}
+          variants={scrollBlurUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
           className="mb-14 text-center"
         >
           <p className="mb-3 text-[13px] font-semibold uppercase tracking-widest text-primary">
@@ -110,8 +104,8 @@ export function Features() {
         <motion.div
           variants={container}
           initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
+          whileInView="visible"
+          viewport={viewportOnce}
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
           {features.map((feature) => (

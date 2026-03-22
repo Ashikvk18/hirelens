@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { scrollBlurUp, scrollFadeUp, scrollStagger, scrollStaggerItem, viewportOnce, viewportOnceEarly } from "@/lib/motion";
 
 export default function InterviewPrepPage() {
   const { user, loading: authLoading } = useAuth();
@@ -68,7 +69,13 @@ export default function InterviewPrepPage() {
       </header>
 
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+        <motion.div
+          variants={scrollBlurUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnceEarly}
+          className="text-center"
+        >
           <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
             Interview Preparation
           </h1>
@@ -82,13 +89,15 @@ export default function InterviewPrepPage() {
           </p>
         </motion.div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2">
+        <motion.div
+          variants={scrollStagger(0.12)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="mt-10 grid gap-5 sm:grid-cols-2"
+        >
           {/* Technical */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
+          <motion.div variants={scrollStaggerItem}>
             <Link
               href={`/interview-prep/technical${qs}`}
               className="group relative block overflow-hidden rounded-2xl border border-white/[0.04] bg-card/40 p-6 transition-all duration-300 hover:border-emerald-500/20 hover:bg-card/60"
@@ -111,11 +120,7 @@ export default function InterviewPrepPage() {
           </motion.div>
 
           {/* Behavioral */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
+          <motion.div variants={scrollStaggerItem}>
             <Link
               href={`/interview-prep/behavioral${qs}`}
               className="group relative block overflow-hidden rounded-2xl border border-white/[0.04] bg-card/40 p-6 transition-all duration-300 hover:border-blue-500/20 hover:bg-card/60"
@@ -136,7 +141,7 @@ export default function InterviewPrepPage() {
               </div>
             </Link>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

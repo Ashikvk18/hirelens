@@ -25,6 +25,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { scrollBlurUp, scrollFadeUp, scrollStagger, scrollStaggerItem, scrollStaggerItemBlur, viewportOnce, viewportOnceEarly } from "@/lib/motion";
 
 interface Application {
   id: string;
@@ -187,7 +188,12 @@ export default function ApplicationsPage() {
 
       <div className="mx-auto max-w-5xl px-4 py-6">
         {/* Title + Stats */}
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+        <motion.div
+          variants={scrollBlurUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnceEarly}
+        >
           <h1 className="text-2xl font-bold tracking-tight">Application Tracker</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Track your job applications and their progress.
@@ -196,9 +202,10 @@ export default function ApplicationsPage() {
 
         {/* Stats bar */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
+          variants={scrollStagger(0.06)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnceEarly}
           className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5"
         >
           {[
@@ -208,13 +215,14 @@ export default function ApplicationsPage() {
             { label: "Offered", value: stats.offered, color: "text-emerald-400" },
             { label: "Rejected", value: stats.rejected, color: "text-red-400" },
           ].map((s) => (
-            <div
+            <motion.div
               key={s.label}
+              variants={scrollStaggerItem}
               className="rounded-lg border border-border bg-card/50 p-3 text-center"
             >
               <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
               <p className="text-xs text-muted-foreground">{s.label}</p>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
 
@@ -262,7 +270,7 @@ export default function ApplicationsPage() {
         {/* Applications list */}
         <div className="mt-4 space-y-3">
           <AnimatePresence>
-            {filtered.map((app, i) => {
+            {filtered.map((app) => {
               const statusOpt = STATUS_OPTIONS.find((s) => s.value === app.status) || STATUS_OPTIONS[0];
               const StatusIcon = statusOpt.icon;
               const isExpanded = expandedId === app.id;
@@ -273,7 +281,7 @@ export default function ApplicationsPage() {
                   initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.35, delay: i * 0.04 }}
+                  transition={{ duration: 0.4 }}
                   whileHover={{ y: -2, transition: { duration: 0.2 } }}
                   className="rounded-xl border border-border bg-card/50 overflow-hidden transition-all duration-300 hover:border-white/[0.1] hover:shadow-lg hover:shadow-primary/[0.02]"
                 >

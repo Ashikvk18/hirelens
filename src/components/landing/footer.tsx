@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { scrollFadeUp, viewportOnce } from "@/lib/motion";
 
 const footerLinks = [
   { href: "/analyze", label: "Analyze" },
@@ -13,10 +14,10 @@ const footerLinks = [
 export function Footer() {
   return (
     <motion.footer
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+      variants={scrollFadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportOnce}
       className="border-t border-white/[0.04] px-4 py-10"
     >
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 sm:flex-row">
