@@ -28,12 +28,11 @@ const steps = [
 ];
 
 const stepVariant = {
-  hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
+  hidden: { opacity: 0, y: 24 },
   show: (i: number) => ({
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.5, delay: i * 0.15 },
+    transition: { duration: 0.45, delay: i * 0.12 },
   }),
 };
 
@@ -47,10 +46,10 @@ export function HowItWorks() {
 
       <div className="relative mx-auto max-w-5xl">
         <motion.div
-          initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.45 }}
           className="mb-14 text-center"
         >
           <p className="mb-3 text-[13px] font-semibold uppercase tracking-widest text-primary">

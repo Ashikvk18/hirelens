@@ -25,15 +25,13 @@ export function Navbar() {
   const { user, loading, signOut } = useAuth();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Scroll-aware background
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdown on click outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -57,20 +55,26 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50">
-        <div className={`border-b transition-all duration-500 ${scrolled ? "border-white/[0.06] bg-background/80 backdrop-blur-2xl backdrop-saturate-150 shadow-lg shadow-black/20" : "border-transparent bg-transparent"}`}>
-          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <motion.nav
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+        className="fixed top-0 left-0 right-0 z-50"
+      >
+        <div
+          className={`border-b transition-all duration-300 ease-out ${
+            scrolled
+              ? "border-white/[0.06] bg-background/80 backdrop-blur-2xl backdrop-saturate-150 shadow-[0_1px_20px_rgba(0,0,0,0.25)]"
+              : "border-transparent bg-transparent backdrop-blur-none"
+          }`}
+        >
+          <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 sm:px-6">
             {/* Logo */}
-            <Link href="/" className="group flex items-center gap-2.5">
-              <motion.div
-                whileHover={{ scale: 1.08, rotate: 3 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/20 transition-shadow group-hover:shadow-primary/40"
-              >
-                <Sparkles size={14} className="text-white" />
-              </motion.div>
-              <span className="text-lg font-bold tracking-tight">
+            <Link href="/" className="group flex items-center gap-2">
+              <div className="relative flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-md shadow-primary/25 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/35">
+                <Sparkles size={12} className="text-white" />
+              </div>
+              <span className="text-[15px] font-bold tracking-tight">
                 Hire<span className="text-primary">Lens</span>
               </span>
             </Link>
@@ -81,33 +85,32 @@ export function Navbar() {
                 <Link
                   key={l.href}
                   href={l.href}
-                  className="rounded-lg px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
+                  className="relative rounded-lg px-3 py-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {l.label}
                 </Link>
               ))}
 
-              <div className="mx-2 h-4 w-px bg-border" />
+              <div className="mx-2.5 h-3.5 w-px bg-white/[0.06]" />
 
               <Link href="/analyze">
-                <Button size="sm" variant="secondary" className="text-[13px] h-8">
+                <Button size="sm" variant="secondary" className="h-8 text-[12px] px-3">
                   Analyze Resume
                 </Button>
               </Link>
 
               {!loading && user ? (
                 <>
-                  <div className="mx-1 h-4 w-px bg-border" />
+                  <div className="mx-1.5 h-3.5 w-px bg-white/[0.06]" />
 
-                  {/* Compact nav pills */}
-                  <div className="flex items-center gap-0.5 rounded-lg bg-white/[0.03] p-0.5">
+                  <div className="flex items-center gap-0.5 rounded-lg border border-white/[0.04] bg-white/[0.02] p-0.5">
                     {userLinks.slice(0, 2).map((l) => (
                       <Link
                         key={l.href}
                         href={l.href}
-                        className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
+                        className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[11px] text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
                       >
-                        <l.icon size={13} />
+                        <l.icon size={12} />
                         {l.label}
                       </Link>
                     ))}
@@ -117,27 +120,27 @@ export function Navbar() {
                   <div className="relative ml-1" ref={menuRef}>
                     <button
                       onClick={() => setUserMenuOpen(!userMenuOpen)}
-                      className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-white/[0.04]"
+                      className="flex items-center gap-1.5 rounded-lg px-1.5 py-1 transition-colors hover:bg-white/[0.04]"
                     >
-                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-primary/80 to-accent/80 text-[11px] font-bold text-white">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-primary/80 to-accent/80 text-[10px] font-bold text-white ring-2 ring-background">
                         {user.email?.charAt(0).toUpperCase()}
                       </div>
                       <ChevronDown
-                        size={12}
-                        className={`text-muted-foreground transition-transform ${userMenuOpen ? "rotate-180" : ""}`}
+                        size={11}
+                        className={`text-muted-foreground transition-transform duration-200 ${userMenuOpen ? "rotate-180" : ""}`}
                       />
                     </button>
 
                     <AnimatePresence>
                       {userMenuOpen && (
                         <motion.div
-                          initial={{ opacity: 0, y: 4, scale: 0.97 }}
+                          initial={{ opacity: 0, y: 6, scale: 0.96 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 4, scale: 0.97 }}
-                          transition={{ duration: 0.15 }}
-                          className="absolute right-0 top-full mt-2 w-52 overflow-hidden rounded-xl border border-border bg-card shadow-2xl shadow-black/50"
+                          exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                          transition={{ duration: 0.15, ease: "easeOut" }}
+                          className="absolute right-0 top-full mt-2 w-48 overflow-hidden rounded-xl border border-white/[0.06] bg-card/95 shadow-2xl shadow-black/40 backdrop-blur-xl"
                         >
-                          <div className="border-b border-border px-3 py-2.5">
+                          <div className="border-b border-white/[0.04] px-3 py-2">
                             <p className="text-[11px] text-muted-foreground truncate">{user.email}</p>
                           </div>
                           <div className="p-1">
@@ -146,19 +149,19 @@ export function Navbar() {
                                 key={l.href}
                                 href={l.href}
                                 onClick={() => setUserMenuOpen(false)}
-                                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
+                                className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-[12px] text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
                               >
-                                <l.icon size={14} />
+                                <l.icon size={13} />
                                 {l.label}
                               </Link>
                             ))}
                           </div>
-                          <div className="border-t border-border p-1">
+                          <div className="border-t border-white/[0.04] p-1">
                             <button
                               onClick={() => { signOut(); setUserMenuOpen(false); }}
-                              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-red-400 transition-colors hover:bg-red-500/5"
+                              className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-[12px] text-red-400 transition-colors hover:bg-red-500/5"
                             >
-                              <LogOut size={14} />
+                              <LogOut size={13} />
                               Sign Out
                             </button>
                           </div>
@@ -168,7 +171,7 @@ export function Navbar() {
                   </div>
                 </>
               ) : !loading ? (
-                <Button size="sm" onClick={() => setAuthOpen(true)} className="ml-2 h-8 text-[13px]">
+                <Button size="sm" onClick={() => setAuthOpen(true)} className="ml-2 h-8 text-[12px] px-3.5">
                   Sign In
                 </Button>
               ) : null}
@@ -176,7 +179,7 @@ export function Navbar() {
 
             {/* Mobile toggle */}
             <button
-              className="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:bg-white/[0.04] md:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:bg-white/[0.06] md:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
@@ -191,14 +194,15 @@ export function Navbar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden border-b border-border bg-card/95 backdrop-blur-xl md:hidden"
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="overflow-hidden border-b border-white/[0.06] bg-background/95 backdrop-blur-2xl md:hidden"
             >
-              <div className="flex flex-col gap-1 px-4 py-3">
+              <div className="flex flex-col gap-0.5 px-4 py-3">
                 {navLinks.map((l) => (
                   <Link
                     key={l.href}
                     href={l.href}
-                    className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-white/[0.04]"
+                    className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
                     onClick={() => setMobileOpen(false)}
                   >
                     {l.label}
@@ -206,26 +210,26 @@ export function Navbar() {
                 ))}
 
                 <Link href="/analyze" onClick={() => setMobileOpen(false)}>
-                  <Button size="sm" variant="secondary" className="mt-1 w-full">
+                  <Button size="sm" variant="secondary" className="mt-1.5 w-full">
                     Analyze Resume
                   </Button>
                 </Link>
 
                 {!loading && user ? (
                   <>
-                    <div className="my-1 h-px bg-border" />
+                    <div className="my-2 h-px bg-white/[0.04]" />
                     {userLinks.map((l) => (
                       <Link
                         key={l.href}
                         href={l.href}
-                        className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-white/[0.04]"
+                        className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
                         onClick={() => setMobileOpen(false)}
                       >
                         <l.icon size={15} />
                         {l.label}
                       </Link>
                     ))}
-                    <div className="my-1 h-px bg-border" />
+                    <div className="my-2 h-px bg-white/[0.04]" />
                     <button
                       onClick={() => { signOut(); setMobileOpen(false); }}
                       className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/5"
@@ -237,7 +241,7 @@ export function Navbar() {
                 ) : !loading ? (
                   <Button
                     size="sm"
-                    className="mt-1 w-full"
+                    className="mt-1.5 w-full"
                     onClick={() => { setAuthOpen(true); setMobileOpen(false); }}
                   >
                     Sign In
@@ -247,7 +251,7 @@ export function Navbar() {
             </motion.div>
           )}
         </AnimatePresence>
-      </nav>
+      </motion.nav>
 
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </>

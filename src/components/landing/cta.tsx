@@ -9,13 +9,13 @@ export function CTA() {
   return (
     <section className="px-4 py-28">
       <motion.div
-        initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
-        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.5 }}
         className="mx-auto max-w-4xl"
       >
-        <div className="relative overflow-hidden rounded-3xl border border-white/[0.06] bg-card/50 p-10 text-center sm:p-14 md:p-20 animate-border-glow">
+        <div className="relative overflow-hidden rounded-3xl border border-white/[0.06] bg-card/50 p-10 text-center sm:p-14 md:p-20">
           {/* Animated gradient orbs */}
           <div className="pointer-events-none absolute left-1/2 top-0 h-48 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[100px] animate-gradient-shift" />
           <div className="pointer-events-none absolute bottom-0 right-0 h-32 w-64 translate-x-1/4 translate-y-1/4 rounded-full bg-accent/15 blur-[80px] animate-gradient-shift-alt" />
@@ -63,7 +63,7 @@ export function CTA() {
               <Link href="/analyze">
                 <Button
                   size="lg"
-                  className="group gap-2 text-base shadow-xl shadow-primary/25 transition-all duration-300 hover:shadow-primary/40 hover:scale-[1.03] active:scale-[0.97] animate-glow-pulse"
+                  className="group gap-2 text-base shadow-lg shadow-primary/20 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30"
                 >
                   Start Analyzing
                   <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
