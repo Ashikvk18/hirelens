@@ -637,3 +637,142 @@ src/components/auth/auth-modal.tsx         # Bottom-sheet on mobile
 src/app/interview-prep/technical/page.tsx  # Scrollable tabs
 src/app/interview-prep/behavioral/page.tsx # Scrollable tabs
 ```
+
+---
+
+## Premium UI/Motion Overhaul ✅
+**Date:** 2026-03-21
+
+### Phase 1: Audit
+- Inspected all landing components, internal pages, shared UI patterns
+- Identified: no visual anchor in hero, identical animations everywhere, no microinteractions, no scroll-driven effects, flat stat chips, static gradient orbs
+
+### Phase 2: Landing Page Premium Motion
+**globals.css — Animation Keyframes:**
+- `animate-float` / `float-slow` / `float-delay` — gentle Y-bob for floating elements
+- `animate-glow-pulse` — breathing purple glow for buttons/cards
+- `animate-shimmer` — loading skeleton sweep
+- `animate-gradient-shift` / `shift-alt` / `shift-slow` — moving gradient mesh background
+- `animate-spin-slow` — decorative orbital rotation
+- `animate-border-glow` — pulsing border highlight
+- All respect `prefers-reduced-motion`
+
+**Spline Scene (`spline-scene.tsx`):**
+- Lazy-loaded via IntersectionObserver (no paint until visible)
+- Animated CSS fallback: 3 orbital rings with colored data nodes, connection lines, floating labels
+- Desktop only (`hidden lg:block`), gracefully absent on mobile
+- Ready for real Spline swap (documented setup instructions in component)
+
+**Hero:**
+- Split layout: text left, Spline visual right on desktop
+- Blur-up text reveals (`filter: blur(10px) → 0`)
+- Animated gradient mesh background (3 moving orbs with different speeds)
+- Radial vignette for depth
+- CTA buttons: hover scale + active press + arrow shift microinteraction
+- 5 floating stat chips with staggered entrance + floating bob animation
+- Badge with animated border glow + pulsing sparkle icon
+
+**Navbar:**
+- Scroll-aware background: transparent at top → glassmorphism on scroll
+- Logo: spring hover animation (scale + slight rotate)
+- Smooth 500ms transition
+
+**Features:**
+- Blur-up stagger for heading and cards
+- Card `whileHover` Y-lift (-4px)
+- Per-card colored shadow glow on hover
+- Icon scale-up on hover (110%)
+- Background glow accent
+
+**How It Works:**
+- Blur-up heading
+- Custom staggered step entrance with delay per step
+- Animated connector lines (scaleX from 0 → 1)
+- Spring-animated step number badges
+- Card hover lift + shadow
+- Icon scale on hover
+
+**CTA:**
+- Blur-up card entrance
+- Staggered inner elements (badge → heading → text → button)
+- Animated border glow on card
+- Moving gradient orbs
+- Button breathing glow-pulse + hover scale + arrow shift
+
+**Footer:**
+- Fade-in on viewport
+- Logo glow on hover
+- Link underline slide animation
+
+### Phase 3: Internal Page Motion System
+**Shared motion library (`src/lib/motion.ts`):**
+- `blurUp`, `fadeUp`, `fadeIn`, `scaleIn` — reveal variants
+- `staggerContainer`, `staggerContainerFast` — parent stagger
+- `staggerItem`, `staggerItemBlur` — child items
+- `springBounce`, `springGentle`, `easeSmooth`, `easeSlow` — transition presets
+- `hoverLift`, `hoverScale`, `hoverGlow` — hover presets
+
+**Jobs page:**
+- Job cards: blur-up entrance, `whileHover` Y-lift, hover shadow glow
+- Loading state: shimmer skeleton cards (4 placeholders with animated sweep)
+
+**Applications page:**
+- Application cards: blur-up entrance, hover lift, hover border glow + shadow
+
+**Profile page:**
+- Heading: blur-up reveal
+
+**Analyze page:**
+- Results panel: blur-up reveal for all sections
+- Loading state: shimmer skeleton blocks beneath spinner
+
+### Phase 4: Design System Polish
+**Button (`button.tsx`):**
+- `rounded-lg` everywhere (was `rounded-md`)
+- `active:scale-[0.97]` press effect
+- Default: improved hover shadow (`shadow-xl shadow-primary/30`)
+- Secondary/Outline: subtle border whitening on hover
+- Ghost: `bg-white/[0.04]` hover
+
+**Badge (`badge.tsx`):**
+- Colored borders for destructive/success/warning variants
+- Default: primary shadow glow
+- Outline: hover border + text transitions
+
+**Textarea (`textarea.tsx`):**
+- Focus: border glow + bg shift + ring
+- Improved placeholder opacity (60%)
+- Leading-relaxed for readability
+
+**Progress (`progress.tsx`):**
+- Slightly more transparent track (`bg-secondary/60`)
+
+**Global input focus:**
+- All inputs/selects get purple border glow + darkened bg on focus
+
+### New files
+```
+src/components/landing/spline-scene.tsx  # Spline 3D hero visual (CSS fallback, Spline-ready)
+src/lib/motion.ts                        # Shared motion variants and presets
+```
+
+### Modified files
+```
+src/app/globals.css                      # Animation keyframes, input focus, reduced-motion
+src/app/layout.tsx                       # Viewport meta (done in mobile phase)
+src/components/landing/navbar.tsx        # Scroll-aware bg, logo spring animation
+src/components/landing/hero.tsx          # Full redesign: Spline, blur-up, mesh bg, chips
+src/components/landing/features.tsx      # Blur-up stagger, hover lift, icon scale, glow
+src/components/landing/how-it-works.tsx  # Animated connectors, spring badges, hover lift
+src/components/landing/cta.tsx           # Animated border, stagger, glow-pulse button
+src/components/landing/footer.tsx        # Fade-in, link underline slide, logo hover
+src/app/jobs/page.tsx                    # Card blur-up, hover lift, shimmer skeleton
+src/app/applications/page.tsx            # Card blur-up, hover lift, shadow
+src/app/profile/page.tsx                 # Heading blur-up
+src/components/analyzer/results-panel.tsx # Blur-up reveals
+src/components/analyzer/analyzer-form.tsx # Shimmer skeleton loading
+src/components/ui/button.tsx             # Active press, hover glow, rounded-lg
+src/components/ui/badge.tsx              # Colored borders, shadow
+src/components/ui/textarea.tsx           # Focus glow, leading-relaxed
+src/components/ui/progress.tsx           # Transparent track
+```
