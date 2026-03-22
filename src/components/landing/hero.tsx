@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Target, Briefcase, Shield, Zap, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { HeroSpline } from "./spline-scene";
+import { AnimatedHeroBackground } from "./animated-hero-background";
 
 /* ── Animation config ── */
 const stagger = {
@@ -29,21 +30,11 @@ export function Hero() {
   return (
     <section className="relative flex min-h-[100dvh] items-center overflow-hidden px-5 pt-14 pb-10 sm:px-6">
 
-      {/* ── Background ── */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-grid opacity-30" />
+      {/* ── Animated crowd background ── */}
+      <AnimatedHeroBackground />
 
-        {/* Slow-moving gradient orbs */}
-        <div className="absolute left-1/2 top-[-6%] h-[550px] w-[750px] -translate-x-1/2 rounded-full bg-primary/10 blur-[180px] animate-gradient-shift" />
-        <div className="absolute bottom-[-4%] right-[-6%] h-[350px] w-[350px] rounded-full bg-accent/8 blur-[150px] animate-gradient-shift-alt" />
-        <div className="absolute bottom-[30%] left-[-4%] h-[250px] w-[250px] rounded-full bg-violet-500/6 blur-[120px] animate-gradient-shift-slow" />
-
-        {/* Vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--color-background)_72%)]" />
-      </div>
-
-      {/* Top fade */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background to-transparent" />
+      {/* Top fade for navbar blend */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background to-transparent z-[2]" />
 
       {/* ── Two-column layout ── */}
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-12 lg:flex-row lg:items-center lg:gap-8 xl:gap-12">
