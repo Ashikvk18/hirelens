@@ -3,7 +3,7 @@
  * used throughout the application.
  */
 
-import { AnalysisResult, WeakSection, RejectionRisk } from "@/lib/types";
+import { AnalysisResult, WeakSection, RejectionRisk, CategoryCoverage, SectionCheck } from "@/lib/types";
 
 describe("Type Contracts", () => {
   describe("WeakSection", () => {
@@ -37,6 +37,28 @@ describe("Type Contracts", () => {
     });
   });
 
+  describe("CategoryCoverage", () => {
+    it("accepts valid coverage data", () => {
+      const coverage: CategoryCoverage = {
+        category: "programming",
+        label: "Languages",
+        required: 5,
+        matched: 3,
+        coverage: 60,
+      };
+      expect(coverage.coverage).toBe(60);
+      expect(coverage.matched).toBeLessThanOrEqual(coverage.required);
+    });
+  });
+
+  describe("SectionCheck", () => {
+    it("accepts valid section check data", () => {
+      const check: SectionCheck = { section: "Education", present: true };
+      expect(typeof check.present).toBe("boolean");
+      expect(check.section).toBeTruthy();
+    });
+  });
+
   describe("AnalysisResult", () => {
     it("has all required fields with correct types", () => {
       const result: AnalysisResult = {
@@ -52,6 +74,12 @@ describe("Type Contracts", () => {
           reasons: ["Some keywords missing"],
         },
         suggestions: ["Add Kubernetes to your skills"],
+        categoryBreakdown: [
+          { category: "programming", label: "Languages", required: 3, matched: 2, coverage: 67 },
+        ],
+        sectionChecks: [
+          { section: "Education", present: true },
+        ],
       };
 
       expect(typeof result.matchScore).toBe("number");
@@ -60,6 +88,8 @@ describe("Type Contracts", () => {
       expect(Array.isArray(result.weakSections)).toBe(true);
       expect(typeof result.rejectionRisk).toBe("object");
       expect(Array.isArray(result.suggestions)).toBe(true);
+      expect(Array.isArray(result.categoryBreakdown)).toBe(true);
+      expect(Array.isArray(result.sectionChecks)).toBe(true);
     });
   });
 });

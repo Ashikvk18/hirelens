@@ -223,6 +223,8 @@ Machine learning, agile, scrum.
       expect(result).toHaveProperty("weakSections");
       expect(result).toHaveProperty("rejectionRisk");
       expect(result).toHaveProperty("suggestions");
+      expect(result).toHaveProperty("categoryBreakdown");
+      expect(result).toHaveProperty("sectionChecks");
     });
 
     it("returns arrays for keyword fields", () => {
@@ -240,6 +242,72 @@ Machine learning, agile, scrum.
         expect(ws.section).toBeTruthy();
         expect(ws.issue).toBeTruthy();
       }
+    });
+  });
+
+  describe("Category Breakdown", () => {
+    it("returns category coverage for matching categories", () => {
+      const result = analyzeResume(STRONG_RESUME, JOB_DESCRIPTION);
+      expect(Array.isArray(result.categoryBreakdown)).toBe(true);
+      expect(result.categoryBreakdown.length).toBeGreaterThan(0);
+    });
+
+    it("each category has required fields", () => {
+      const result = analyzeResume(STRONG_RESUME, JOB_DESCRIPTION);
+      for (const cat of result.categoryBreakdown) {
+        expect(cat).toHaveProperty("category");
+        expect(cat).toHaveProperty("label");
+        expect(cat).toHaveProperty("required");
+        expect(cat).toHaveProperty("matched");
+        expect(cat).toHaveProperty("coverage");
+        expect(cat.coverage).toBeGreaterThanOrEqual(0);
+        expect(cat.coverage).toBeLessThanOrEqual(100);
+        expect(cat.matched).toBeLessThanOrEqual(cat.required);
+      }
+    });
+
+    it("only includes categories that appear in the job description", () => {
+      const result = analyzeResume(STRONG_RESUME, JOB_DESCRIPTION);
+      for (const cat of result.categoryBreakdown) {
+        expect(cat.required).toBeGreaterThan(0);
+      }
+    });
+
+    it("returns empty breakdown when job has no recognizable skills", () => {
+      const result = analyzeResume("hello world", "seeking a motivated candidate");
+      expect(result.categoryBreakdown).toHaveLength(0);
+    });
+  });
+
+  describe("Section Checks", () => {
+    it("returns 6 section checks", () => {
+      const result = analyzeResume(STRONG_RESUME, JOB_DESCRIPTION);
+      expect(result.sectionChecks).toHaveLength(6);
+    });
+
+    it("each check has section name and present flag", () => {
+      const result = analyzeResume(STRONG_RESUME, JOB_DESCRIPTION);
+      for (const check of result.sectionChecks) {
+        expect(check).toHaveProperty("section");
+        expect(check).toHaveProperty("present");
+        expect(typeof check.present).toBe("boolean");
+      }
+    });
+
+    it("detects present sections in a strong resume", () => {
+      const result = analyzeResume(STRONG_RESUME, JOB_DESCRIPTION);
+      const map = Object.fromEntries(result.sectionChecks.map((c) => [c.section, c.present]));
+      expect(map["Education"]).toBe(true);
+      expect(map["Experience"]).toBe(true);
+      expect(map["Skills"]).toBe(true);
+      expect(map["Projects"]).toBe(true);
+    });
+
+    it("detects missing sections in a weak resume", () => {
+      const result = analyzeResume(WEAK_RESUME, JOB_DESCRIPTION);
+      const map = Object.fromEntries(result.sectionChecks.map((c) => [c.section, c.present]));
+      expect(map["Education"]).toBe(false);
+      expect(map["Skills"]).toBe(false);
     });
   });
 });

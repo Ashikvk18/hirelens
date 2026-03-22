@@ -1,7 +1,7 @@
-import { AnalysisResult, WeakSection } from "./types";
+import { AnalysisResult, WeakSection, CategoryCoverage, SectionCheck } from "./types";
 
 // Common technical skills and keywords grouped by category
-const SKILL_CATEGORIES: Record<string, string[]> = {
+export const SKILL_CATEGORIES: Record<string, string[]> = {
   programming: [
     "python", "java", "javascript", "typescript", "c++", "c#", "ruby", "go",
     "rust", "swift", "kotlin", "php", "scala", "r", "matlab", "sql", "html",
@@ -91,7 +91,16 @@ function extractRequirements(jobDescription: string): string[] {
   return requirements;
 }
 
-function detectWeakSections(resume: string, jobKeywords: string[]): WeakSection[] {
+interface SectionFlags {
+  hasEducation: boolean;
+  hasExperience: boolean;
+  hasSkills: boolean;
+  hasProjects: boolean;
+  hasNumbers: boolean;
+  hasActionVerbs: boolean;
+}
+
+function detectWeakSections(resume: string, jobKeywords: string[]): { weakSections: WeakSection[]; flags: SectionFlags } {
   const weakSections: WeakSection[] = [];
   const lower = resume.toLowerCase();
   const lines = resume.split("\n");
@@ -162,7 +171,10 @@ function detectWeakSections(resume: string, jobKeywords: string[]): WeakSection[
     });
   }
 
-  return weakSections;
+  return {
+    weakSections,
+    flags: { hasEducation, hasExperience, hasSkills, hasProjects, hasNumbers, hasActionVerbs },
+  };
 }
 
 export function analyzeResume(resume: string, jobDescription: string): AnalysisResult {
@@ -191,7 +203,8 @@ export function analyzeResume(resume: string, jobDescription: string): AnalysisR
   matchScore = Math.min(100, matchScore + structureBonus);
 
   // Detect weak sections
-  const weakSections = detectWeakSections(resume, jobKeywords);
+  const { weakSections, flags } = detectWeakSections(resume, jobKeywords);
+  const { hasEducation, hasExperience, hasSkills, hasProjects, hasNumbers, hasActionVerbs } = flags;
 
   // Calculate rejection risk
   const highWeakSections = weakSections.filter((s) => s.severity === "high").length;
@@ -235,6 +248,45 @@ export function analyzeResume(resume: string, jobDescription: string): AnalysisR
     suggestions.push("Your resume is well-aligned! Consider tailoring bullet points to mirror the job description language more closely.");
   }
 
+  // ── Category breakdown for radar chart ──
+  const CATEGORY_LABELS: Record<string, string> = {
+    programming: "Languages",
+    frameworks: "Frameworks",
+    cloud: "Cloud & DevOps",
+    data: "Data & ML",
+    databases: "Databases",
+    soft_skills: "Soft Skills",
+    general: "General",
+  };
+
+  const categoryBreakdown: CategoryCoverage[] = Object.entries(SKILL_CATEGORIES)
+    .map(([key, skills]) => {
+      const jobLower = jobDescription.toLowerCase();
+      const resLower = resume.toLowerCase();
+      const requiredInCategory = skills.filter((s) => jobLower.includes(s));
+      const matchedInCategory = requiredInCategory.filter((s) => resLower.includes(s));
+      return {
+        category: key,
+        label: CATEGORY_LABELS[key] || key,
+        required: requiredInCategory.length,
+        matched: matchedInCategory.length,
+        coverage: requiredInCategory.length > 0
+          ? Math.round((matchedInCategory.length / requiredInCategory.length) * 100)
+          : 0,
+      };
+    })
+    .filter((c) => c.required > 0);
+
+  // ── Section checks for completeness bars ──
+  const sectionChecks: SectionCheck[] = [
+    { section: "Education", present: hasEducation },
+    { section: "Experience", present: hasExperience },
+    { section: "Skills", present: hasSkills },
+    { section: "Projects", present: hasProjects },
+    { section: "Metrics", present: hasNumbers },
+    { section: "Action Verbs", present: hasActionVerbs },
+  ];
+
   return {
     matchScore,
     missingKeywords,
@@ -246,5 +298,7 @@ export function analyzeResume(resume: string, jobDescription: string): AnalysisR
       reasons: riskReasons,
     },
     suggestions,
+    categoryBreakdown,
+    sectionChecks,
   };
 }

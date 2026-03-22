@@ -2,6 +2,9 @@
 
 import { AnalysisResult } from "@/lib/types";
 import { ScoreRing } from "./score-ring";
+import { SkillsRadar } from "./skills-radar";
+import { RiskGauge } from "./risk-gauge";
+import { SectionCompleteness } from "./section-completeness";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { AISuggestions } from "./ai-suggestions";
@@ -111,38 +114,18 @@ export function ResultsPanel({ result, resume, jobDescription }: ResultsPanelPro
         )}
       </motion.div>
 
-      {/* Rejection Risk */}
-      <motion.div
-        {...fadeUp}
-        transition={{ delay: 0.3 }}
-        className={`rounded-xl border border-border p-6 ${riskBg}`}
-      >
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            Rejection Risk
-          </h3>
-          <div className={`flex items-center gap-1.5 text-sm font-semibold ${riskColor}`}>
-            <TrendingDown size={14} />
-            {result.rejectionRisk.level.toUpperCase()}
-          </div>
-        </div>
-        <Progress
-          value={result.rejectionRisk.score}
-          indicatorClassName={riskBarColor}
-          className="mb-3"
-        />
-        <ul className="space-y-1.5">
-          {result.rejectionRisk.reasons.map((reason, i) => (
-            <li
-              key={i}
-              className="flex items-start gap-2 text-sm text-muted-foreground"
-            >
-              <AlertTriangle size={13} className={`mt-0.5 shrink-0 ${riskColor}`} />
-              {reason}
-            </li>
-          ))}
-        </ul>
-      </motion.div>
+      {/* Skills Radar Chart */}
+      {result.categoryBreakdown && result.categoryBreakdown.length >= 3 && (
+        <SkillsRadar data={result.categoryBreakdown} />
+      )}
+
+      {/* Rejection Risk Gauge */}
+      <RiskGauge risk={result.rejectionRisk} />
+
+      {/* Resume Completeness */}
+      {result.sectionChecks && (
+        <SectionCompleteness checks={result.sectionChecks} />
+      )}
 
       {/* Weak Sections */}
       {result.weakSections.length > 0 && (
