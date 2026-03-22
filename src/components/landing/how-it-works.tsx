@@ -3,6 +3,7 @@
 import { Upload, Cpu, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 import { scrollBlurUp, scrollFadeUp, viewportOnce } from "@/lib/motion";
+import { HowItWorksBg } from "./how-it-works-bg";
 
 const steps = [
   {
@@ -40,10 +41,8 @@ const stepVariant = {
 export function HowItWorks() {
   return (
     <section id="how-it-works" className="relative px-4 py-28">
-      {/* Subtle background accent */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.04] blur-[120px]" />
-      </div>
+      {/* 3D orbital rings background */}
+      <HowItWorksBg />
 
       <div className="relative mx-auto max-w-5xl">
         <motion.div

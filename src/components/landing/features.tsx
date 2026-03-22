@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { scrollBlurUp, scrollStagger, scrollStaggerItem, viewportOnce } from "@/lib/motion";
+import { FeaturesBg } from "./features-bg";
 
 const features = [
   {
@@ -82,10 +83,8 @@ const item = scrollStaggerItem;
 export function Features() {
   return (
     <section id="features" className="relative px-4 py-28">
-      {/* Subtle background glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-primary/[0.03] blur-[120px]" />
-      </div>
+      {/* 3D motion graphics background */}
+      <FeaturesBg />
 
       <div className="relative mx-auto max-w-6xl">
         <motion.div
