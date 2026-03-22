@@ -844,3 +844,46 @@ src/components/landing/features.tsx      # Cleaned animation variants
 src/components/landing/how-it-works.tsx  # Cleaned animation variants
 src/components/landing/cta.tsx           # Removed over-animation
 ```
+
+---
+
+## Spline 3D Integration ✅
+**Date:** 2026-03-21
+
+### What was done
+- Installed `@splinetool/react-spline` + `@splinetool/runtime`
+- Rewrote `HeroSpline` component with proper `next/dynamic` code-split (SSR disabled)
+- Accepts optional `sceneUrl` prop — if provided, loads real Spline 3D scene
+- Loading state: lightweight animated skeleton (pulsing core, shimmer rings, shimmer bar)
+- Error handling: `onError` callback falls back to CSS animation — layout never breaks
+- Spline fades in over 700ms via `transition-opacity` once loaded
+- Rounded container (`rounded-2xl`) with subtle border and `backdrop-blur-sm`
+- Layered glow background: primary blur behind + accent center glow
+- CSS fallback (no sceneUrl): 3 orbital rings, core glow, floating data labels, SVG connection lines
+- Hero now shows HeroSpline on **all breakpoints** (mobile stacks below text)
+- Responsive max-width: 280px mobile → 320px sm → 420px lg → 460px xl
+
+### How to activate real Spline 3D
+1. Go to https://app.spline.design and create/find a scene
+   - Suggested: abstract network graph, floating data nodes, career pathway
+   - Use purple palette matching `#7c3aed` / `#8b5cf6`
+   - Set transparent background
+   - Add slow rotation/pulse to feel alive
+2. Publish the scene → copy the public URL (ends in `.splinecode`)
+3. Open `src/components/landing/hero.tsx`
+4. Change `<HeroSpline />` to `<HeroSpline sceneUrl="https://prod.spline.design/YOUR_SCENE/scene.splinecode" />`
+5. Done — the component handles lazy loading, error fallback, and fade-in automatically
+
+### New dependencies
+```
+@splinetool/react-spline
+@splinetool/runtime
+```
+
+### Modified files
+```
+package.json                             # Added Spline dependencies
+package-lock.json                        # Updated lockfile
+src/components/landing/spline-scene.tsx  # Full rewrite: next/dynamic, skeleton, error handling, glow
+src/components/landing/hero.tsx          # Spline visible on all breakpoints, responsive sizing
+```
