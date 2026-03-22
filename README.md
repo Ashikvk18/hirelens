@@ -420,11 +420,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 [![GitHub](https://img.shields.io/badge/GitHub-Ashikvk18-181717?style=for-the-badge&logo=github)](https://github.com/Ashikvk18)
 
-<br/>
-
-Built with ❤️ at Truman State University
-
-<br/>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=120&section=footer" width="100%" />
 
