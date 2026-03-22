@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -96,7 +96,7 @@ const TYPE_ICONS: Record<string, string> = {
   reading: "📖",
 };
 
-export default function SkillsRoadmapPage() {
+function SkillsRoadmapContent() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -492,5 +492,19 @@ export default function SkillsRoadmapPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SkillsRoadmapPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <Loader2 size={24} className="animate-spin text-muted-foreground" />
+        </div>
+      }
+    >
+      <SkillsRoadmapContent />
+    </Suspense>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Loader2 as SuspenseLoader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -55,7 +56,7 @@ const CATEGORY_BADGE: Record<string, string> = {
   adaptability: "text-cyan-400 bg-cyan-400/10",
 };
 
-export default function BehavioralPrepPage() {
+function BehavioralPrepContent() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -122,6 +123,7 @@ export default function BehavioralPrepPage() {
   if (!user) return null;
 
   return (
+
     <div className="min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-white/[0.04] bg-background/70 backdrop-blur-2xl backdrop-saturate-150">
@@ -366,5 +368,19 @@ export default function BehavioralPrepPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function BehavioralPrepPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <SuspenseLoader size={24} className="animate-spin text-muted-foreground" />
+        </div>
+      }
+    >
+      <BehavioralPrepContent />
+    </Suspense>
   );
 }

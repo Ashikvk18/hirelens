@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Loader2 as SuspenseLoader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -50,7 +51,7 @@ const DIFFICULTY_STYLES: Record<string, string> = {
   hard: "text-red-400 bg-red-400/10",
 };
 
-export default function TechnicalPrepPage() {
+function TechnicalPrepContent() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -335,5 +336,19 @@ export default function TechnicalPrepPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function TechnicalPrepPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <SuspenseLoader size={24} className="animate-spin text-muted-foreground" />
+        </div>
+      }
+    >
+      <TechnicalPrepContent />
+    </Suspense>
   );
 }

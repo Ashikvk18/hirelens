@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/components/auth/auth-provider";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import Link from "next/link";
 import {
   Loader2,
@@ -15,7 +15,7 @@ import {
 import { motion } from "framer-motion";
 import { scrollBlurUp, scrollFadeUp, scrollStagger, scrollStaggerItem, viewportOnce, viewportOnceEarly } from "@/lib/motion";
 
-export default function InterviewPrepPage() {
+function InterviewPrepContent() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -144,5 +144,19 @@ export default function InterviewPrepPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function InterviewPrepPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <Loader2 size={24} className="animate-spin text-muted-foreground" />
+        </div>
+      }
+    >
+      <InterviewPrepContent />
+    </Suspense>
   );
 }
