@@ -181,12 +181,18 @@ export function AnalyzerForm() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="flex min-h-[400px] flex-col items-center justify-center rounded-xl border border-border bg-card/50"
+                className="min-h-[400px] rounded-xl border border-border bg-card/50 p-6 space-y-5"
               >
-                <Loader2 size={32} className="mb-4 animate-spin text-primary" />
-                <p className="text-sm text-muted-foreground">
-                  Analyzing your resume...
-                </p>
+                <div className="flex flex-col items-center justify-center pt-8 pb-4">
+                  <Loader2 size={28} className="mb-3 animate-spin text-primary" />
+                  <p className="text-sm text-muted-foreground">Analyzing your resume...</p>
+                </div>
+                <div className="space-y-4">
+                  <div className="h-20 rounded-lg bg-secondary/30 animate-shimmer" />
+                  <div className="h-16 rounded-lg bg-secondary/20 animate-shimmer" />
+                  <div className="h-24 rounded-lg bg-secondary/20 animate-shimmer" />
+                  <div className="h-12 rounded-lg bg-secondary/15 animate-shimmer" />
+                </div>
               </motion.div>
             )}
 

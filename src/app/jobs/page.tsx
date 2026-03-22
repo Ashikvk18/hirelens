@@ -403,9 +403,22 @@ export default function JobsPage() {
         <div className="mt-6">
           {/* Loading */}
           {loading && (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 size={28} className="mb-3 animate-spin text-primary" />
-              <p className="text-sm text-muted-foreground">Searching jobs...</p>
+            <div className="space-y-3">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="rounded-xl border border-border bg-card/30 p-5">
+                  <div className="flex gap-4">
+                    <div className="hidden sm:block h-12 w-12 rounded-lg bg-secondary/50 animate-shimmer" />
+                    <div className="flex-1 space-y-3">
+                      <div className="h-4 w-2/3 rounded bg-secondary/50 animate-shimmer" />
+                      <div className="h-3 w-1/3 rounded bg-secondary/30 animate-shimmer" />
+                      <div className="flex gap-3 mt-2">
+                        <div className="h-3 w-16 rounded bg-secondary/30 animate-shimmer" />
+                        <div className="h-3 w-20 rounded bg-secondary/30 animate-shimmer" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 
@@ -445,13 +458,14 @@ export default function JobsPage() {
                   return (
                     <motion.div
                       key={job.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.03 }}
+                      initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      transition={{ duration: 0.35, delay: i * 0.04 }}
+                      whileHover={{ y: -2, transition: { duration: 0.2 } }}
                     >
                       <div
-                        className={`group rounded-xl border bg-card/50 p-4 transition-all hover:bg-card/80 sm:p-5 ${
-                          isApplied ? "border-emerald-500/30" : "border-border hover:border-primary/40"
+                        className={`group rounded-xl border bg-card/50 p-4 transition-all duration-300 hover:bg-card/80 hover:shadow-lg hover:shadow-primary/[0.03] sm:p-5 ${
+                          isApplied ? "border-emerald-500/30" : "border-border hover:border-white/[0.1]"
                         }`}
                       >
                         <div className="flex gap-4">

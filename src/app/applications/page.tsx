@@ -270,11 +270,12 @@ export default function ApplicationsPage() {
               return (
                 <motion.div
                   key={app.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -12 }}
-                  transition={{ delay: i * 0.02 }}
-                  className="rounded-xl border border-border bg-card/50 overflow-hidden"
+                  transition={{ duration: 0.35, delay: i * 0.04 }}
+                  whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                  className="rounded-xl border border-border bg-card/50 overflow-hidden transition-all duration-300 hover:border-white/[0.1] hover:shadow-lg hover:shadow-primary/[0.02]"
                 >
                   {/* Main row */}
                   <div className="flex items-center gap-3 p-4">

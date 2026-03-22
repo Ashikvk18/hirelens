@@ -204,7 +204,7 @@ export default function ProfilePage() {
       </header>
 
       <div className="mx-auto max-w-4xl px-4 py-8">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+        <motion.div initial={{ opacity: 0, y: 16, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.5 }}>
           <h1 className="text-2xl font-bold tracking-tight">Set Up Your Profile</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Tell us about yourself so we can find the best jobs for you.
