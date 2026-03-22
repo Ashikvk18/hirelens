@@ -8,6 +8,7 @@ import { scrollFadeUp, viewportOnce } from "@/lib/motion";
 const footerLinks = [
   { href: "/analyze", label: "Analyze" },
   { href: "/jobs", label: "Jobs" },
+  { href: "/cover-letter", label: "Cover Letter" },
   { href: "https://github.com/Ashikvk18/hirelens", label: "GitHub", external: true },
 ];
 

@@ -11,6 +11,7 @@ import {
   LogOut,
   ChevronDown,
   Sparkles,
+  FileText,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -49,6 +50,7 @@ export function Navbar() {
 
   const userLinks = [
     { href: "/jobs", label: "Job Board", icon: Briefcase },
+    { href: "/cover-letter", label: "Cover Letter", icon: FileText },
     { href: "/applications", label: "Applications", icon: ClipboardList },
     { href: "/profile", label: "My Profile", icon: User },
   ];

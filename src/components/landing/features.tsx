@@ -7,6 +7,7 @@ import {
   TrendingUp,
   MessageSquare,
   Zap,
+  FileText,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { scrollBlurUp, scrollStagger, scrollStaggerItem, viewportOnce } from "@/lib/motion";
@@ -65,6 +66,15 @@ const features = [
     color: "from-violet-500/20 to-violet-500/5",
     iconColor: "text-violet-400",
     glowColor: "group-hover:shadow-violet-500/10",
+  },
+  {
+    icon: FileText,
+    title: "Cover Letter Generator",
+    description:
+      "AI-crafted cover letters tailored to each job description in seconds.",
+    color: "from-cyan-500/20 to-cyan-500/5",
+    iconColor: "text-cyan-400",
+    glowColor: "group-hover:shadow-cyan-500/10",
   },
 ];
 
