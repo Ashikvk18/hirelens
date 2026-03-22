@@ -1048,3 +1048,77 @@ The component now renders a single `<video>` element with blend overlays:
 src/components/landing/animated-hero-background.tsx  # Complete rewrite: video background
 public/videos/bgHirelens.mp4                        # New video file
 ```
+
+---
+
+## Scroll Animations — Full App Motion System ✅
+**Date:** 2026-03-21
+
+### Context
+Pages had basic mount-time animations but no scroll-triggered reveals.
+Content below the fold was already visible when scrolled to. This pass adds
+consistent scroll-triggered animations across every page.
+
+### Shared Motion Library (`src/lib/motion.ts`)
+
+**New scroll-triggered variants:**
+
+| Variant | Effect | Duration |
+|---------|--------|----------|
+| `scrollFadeUp` | fade + slide up 24px | 0.5s |
+| `scrollBlurUp` | fade + slide up + blur 6px→0 | 0.55s |
+| `scrollScaleIn` | fade + scale 0.92→1 | 0.5s |
+| `scrollFadeLeft` | fade + slide from left 30px | 0.5s |
+| `scrollFadeRight` | fade + slide from right 30px | 0.5s |
+
+**New scroll stagger system:**
+- `scrollStagger(delay, childDelay)` — creates a parent container variant
+- `scrollStaggerItem` — child: fade + slide up
+- `scrollStaggerItemBlur` — child: fade + slide up + blur
+- `scrollStaggerItemScale` — child: fade + scale in
+
+**Viewport presets:**
+- `viewportOnce` — `{ once: true, margin: "-60px" }`
+- `viewportOnceEarly` — `{ once: true, margin: "-30px" }`
+- `viewportOnceDeep` — `{ once: true, margin: "-100px" }`
+
+All ease curves use explicit `[number,number,number,number]` tuples for
+Framer Motion TypeScript compatibility.
+
+### Pages Updated
+
+**Landing page:**
+- `features.tsx` — heading: `scrollBlurUp`, cards: `scrollStagger` + `scrollStaggerItem`
+- `how-it-works.tsx` — heading: `scrollBlurUp`, steps: custom variant with stagger delay
+- `cta.tsx` — card: `scrollScaleIn`, inner elements: `scrollFadeUp`
+- `footer.tsx` — `scrollFadeUp`
+
+**App pages (all converted to scroll-triggered `whileInView`):**
+- `analyze/page.tsx` — converted to client component, heading: `scrollBlurUp`, form: `scrollFadeUp`
+- `jobs/page.tsx` — title: `scrollBlurUp`, search: `scrollFadeUp`, job cards: `scrollStagger` + `scrollStaggerItemBlur`
+- `applications/page.tsx` — title: `scrollBlurUp`, stats grid: `scrollStagger` + `scrollStaggerItem`
+- `interview-prep/page.tsx` — title: `scrollBlurUp`, cards: `scrollStagger` + `scrollStaggerItem`
+- `skills-roadmap/page.tsx` — title: `scrollBlurUp`, form: `scrollFadeUp`, gap analysis: `scrollStagger`, projects: `scrollStagger` + hover lift
+- `profile/page.tsx` — title: `scrollBlurUp`, all form sections: `scrollFadeUp`, save buttons: `scrollFadeUp`
+
+### Design Decisions
+- All scroll reveals use `once: true` — elements animate in once, don't re-animate on scroll back
+- Negative margin triggers (`-30px` to `-100px`) so elements start animating slightly before they enter viewport
+- Stagger delays are 60–120ms — fast enough to feel snappy, slow enough to be noticed
+- No blur on stagger children by default (reserved for premium reveals)
+- Hover effects preserved on all interactive cards
+
+### Modified files
+```
+src/lib/motion.ts                           # Expanded with scroll variants, stagger system, viewport presets
+src/components/landing/features.tsx         # scrollBlurUp + scrollStagger
+src/components/landing/how-it-works.tsx     # scrollBlurUp + custom step variant
+src/components/landing/cta.tsx              # scrollScaleIn + scrollFadeUp
+src/components/landing/footer.tsx           # scrollFadeUp
+src/app/analyze/page.tsx                    # Client component + scroll animations
+src/app/jobs/page.tsx                       # Scroll-triggered title, search, job cards
+src/app/applications/page.tsx               # Scroll-triggered stats + cards
+src/app/interview-prep/page.tsx             # Scroll-triggered cards
+src/app/skills-roadmap/page.tsx             # Scroll-triggered sections
+src/app/profile/page.tsx                    # Scroll-triggered form sections
+```
