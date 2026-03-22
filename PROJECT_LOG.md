@@ -1177,3 +1177,79 @@ src/components/landing/features.tsx      # Added Cover Letter Generator feature 
 src/components/landing/footer.tsx        # Added Cover Letter nav link
 src/components/landing/navbar.tsx        # Added Cover Letter to user dropdown menu
 ```
+
+---
+
+## Features Section Redesign ✅
+**Date:** 2026-03-22
+
+### Context
+The Features section had 7 generic sub-feature cards (Match Score, Missing Keywords, etc.)
+that were not clickable and didn't link anywhere. Redesigned to reflect 6 actual product
+pages, each as a clickable `<Link>` card.
+
+### Changes
+- Consolidated 4 analyzer sub-features into one **Resume Analyzer** card → `/analyze`
+- Added **Smart Job Board** → `/jobs`
+- Added **Cover Letter Generator** → `/cover-letter`
+- Added **Interview Prep** → `/interview-prep`
+- Added **Skills Roadmap** → `/skills-roadmap`
+- Added **Application Tracker** → `/applications`
+- Each card now has a "Try it now →" CTA that fades in on hover
+- Updated subtitle: "Six powerful tools — from resume analysis to interview prep — all powered by AI."
+
+### Modified files
+```
+src/components/landing/features.tsx     # Full redesign: 6 product cards with Link wrappers
+```
+
+---
+
+## 3D Motion Graphics Backgrounds ✅
+**Date:** 2026-03-22
+
+### Context
+Added visually stunning 3D animated backgrounds to Features and How It Works sections,
+then upgraded them to react to mouse movement with multi-depth parallax.
+
+### Shared Hook (`src/hooks/use-mouse-parallax.ts`)
+- Tracks mouse position relative to container, normalized to -1 → 1
+- Returns spring-smoothed (stiffness: 50, damping: 30) motion values
+- **Scene tilt**: rotateX/rotateY (±8°) — entire background tilts toward cursor
+- **3 depth layers**:
+  - `shallowOffset` (±12px) — far background
+  - `offset` (±30px) — mid-layer
+  - `deepOffset` (±50px) — foreground, strongest movement
+- Mouse leave → springs back to center smoothly
+
+### Features Background (`features-bg.tsx`)
+- **Deep layer**: rotating ring, triple concentric tilted rings, dot grid texture
+- **Mid layer**: 6-face wireframe cube, nested triangle wireframe, orbiting ring with glowing node, horizontal light streak
+- **Front layer**: floating diamond, pulsing cyan sphere, hexagon wireframe, 7 glowing colored particles
+
+### How It Works Background (`how-it-works-bg.tsx`)
+- **Deep layer**: 650px tilted orbital ring, dot grid, radial center glow
+- **Mid layer**: primary orbital ring (480px) with orbiting purple node, counter-rotating cyan ring with orbiting node, 6-face wireframe cube, dual light streaks
+- **Front layer**: octahedron diamond with cross-hairs, pulsing center glow, pentagon wireframe, cyan sphere, 7 glowing particles
+
+### New files
+```
+src/hooks/use-mouse-parallax.ts              # Shared mouse-reactive parallax hook
+src/components/landing/features-bg.tsx       # 3D parallax background for Features
+src/components/landing/how-it-works-bg.tsx   # 3D orbital background for How It Works
+```
+
+---
+
+## README.md ✅
+**Date:** 2026-03-22
+
+### Context
+Created a visually stunning GitHub README with animated header/footer banners,
+shields.io badges, feature showcase table with GIFs, architecture diagram,
+tech stack table, quick start guide, project structure, and motion design documentation.
+
+### New files
+```
+README.md    # Full GitHub README with badges, GIFs, architecture, setup guide
+```
