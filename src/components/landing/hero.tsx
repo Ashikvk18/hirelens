@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Target, Briefcase, Shield, Zap, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
-import { AnimatedHeroBackground, AnimatedCrowdScene } from "./animated-hero-background";
+import { AnimatedHeroBackground } from "./animated-hero-background";
 
 /* ── Animation config ── */
 const stagger = {
@@ -35,15 +35,14 @@ export function Hero() {
       {/* Top fade for navbar blend */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background to-transparent z-[2]" />
 
-      {/* ── Two-column layout ── */}
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-12 lg:flex-row lg:items-center lg:gap-8 xl:gap-12">
+      {/* ── Centered content over the cinematic background ── */}
+      <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center">
 
-        {/* ── Left: Copy ── */}
         <motion.div
           variants={stagger}
           initial="hidden"
           animate="show"
-          className="flex-1 text-center lg:text-left"
+          className="text-center"
         >
           {/* Badge */}
           <motion.div variants={fadeSlide}>
@@ -68,7 +67,7 @@ export function Hero() {
           {/* Sub */}
           <motion.p
             variants={fadeSlide}
-            className="mx-auto mb-8 max-w-lg text-[15px] leading-relaxed text-muted-foreground sm:text-base lg:mx-0 lg:max-w-xl"
+            className="mx-auto mb-8 max-w-xl text-[15px] leading-relaxed text-muted-foreground sm:text-base"
           >
             AI-powered resume analysis, personalized job matching, interview prep,
             and career intelligence — everything you need to land the interview.
@@ -77,7 +76,7 @@ export function Hero() {
           {/* CTAs */}
           <motion.div
             variants={fadeSlide}
-            className="flex flex-col items-center gap-3 sm:flex-row lg:justify-start"
+            className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
           >
             <Link href="/analyze">
               <Button
@@ -96,7 +95,7 @@ export function Hero() {
           </motion.div>
 
           {/* Credibility chips */}
-          <motion.div variants={fadeSlide} className="mt-9 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+          <motion.div variants={fadeSlide} className="mt-9 flex flex-wrap items-center justify-center gap-2">
             {chips.map((chip, i) => (
               <motion.div
                 key={chip.label}
@@ -112,17 +111,7 @@ export function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* ── Right: Animated Crowd Scene ── */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }}
-          className="relative w-full max-w-[300px] flex-shrink-0 sm:max-w-[360px] lg:max-w-[440px] xl:max-w-[500px]"
-        >
-          <div className="relative aspect-[4/3] w-full">
-            <AnimatedCrowdScene />
-          </div>
-        </motion.div>
+        {/* Right column intentionally removed — crowd image is now the full-page background */}
       </div>
 
       {/* Bottom fade */}
