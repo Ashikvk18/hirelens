@@ -204,21 +204,21 @@ export default function TechnicalPrepPage() {
         {prep && !loading && (
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-6">
             {/* Category tabs */}
-            <div className="flex flex-wrap gap-1.5 rounded-xl border border-white/[0.04] bg-white/[0.02] p-1.5">
+            <div className="flex gap-1.5 rounded-xl border border-white/[0.04] bg-white/[0.02] p-1.5 scroll-x-auto">
               {CATEGORIES.map((cat) => {
                 const Icon = cat.icon;
                 return (
                   <button
                     key={cat.key}
                     onClick={() => setActiveTab(cat.key)}
-                    className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-[12px] font-medium transition-colors ${
+                    className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-[12px] font-medium whitespace-nowrap transition-colors ${
                       activeTab === cat.key
                         ? "bg-white/[0.06] text-foreground"
                         : "text-muted-foreground hover:text-foreground hover:bg-white/[0.03]"
                     }`}
                   >
                     <Icon size={13} />
-                    <span className="hidden sm:inline">{cat.label}</span>
+                    {cat.label}
                   </button>
                 );
               })}
