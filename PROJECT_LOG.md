@@ -1008,3 +1008,43 @@ Pure SVG + CSS transforms + Framer Motion.
 src/components/landing/animated-hero-background.tsx  # Complete rewrite: SVG silhouette system
 src/components/landing/hero.tsx                      # Centered layout, removed right column
 ```
+
+---
+
+## Hero Background v4 — Video Background ✅
+**Date:** 2026-03-21
+
+### Context
+SVG silhouette approach was too abstract. User created a custom video (`bgHirelens.mp4`)
+from the original crowd image and wants it used as the hero background.
+
+### Implementation
+
+The component now renders a single `<video>` element with blend overlays:
+
+**Video element:**
+- `autoPlay`, `muted`, `loop`, `playsInline` — works on all browsers including mobile Safari
+- `object-cover` with `object-position: center 40%` to focus on the crowd
+- `onCanPlay` callback triggers `.play()` as a fallback for autoplay restrictions
+- Wrapped in a Framer Motion fade-in (2s ease-out)
+
+**Overlay stack (bottom to top):**
+1. **Dark overlay** — `bg-background/55` (55% opacity)
+2. **Purple color grading** — `bg-violet-950/20 mix-blend-multiply` + `bg-primary/[0.04] mix-blend-soft-light`
+3. **Side edge masks** — `bg-gradient-to-r from-background/70 via-transparent to-background/70`
+4. **Top/bottom edge masks** — `bg-gradient-to-b from-background/60 via-transparent to-background/80`
+5. **Radial vignette** — transparent center at 25%, background at 75%
+6. **Mobile darkening** — extra 15% on small screens
+
+**Hero layout** remains centered single-column (`max-w-3xl`, center-aligned text + CTAs).
+
+### Video file
+- **Path:** `public/videos/bgHirelens.mp4`
+- **Size:** ~7.1 MB
+- User-created from the original crowd illustration
+
+### Modified files
+```
+src/components/landing/animated-hero-background.tsx  # Complete rewrite: video background
+public/videos/bgHirelens.mp4                        # New video file
+```
