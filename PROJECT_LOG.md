@@ -1122,3 +1122,58 @@ src/app/interview-prep/page.tsx             # Scroll-triggered cards
 src/app/skills-roadmap/page.tsx             # Scroll-triggered sections
 src/app/profile/page.tsx                    # Scroll-triggered form sections
 ```
+
+---
+
+## Cover Letter Generator ✅
+**Date:** 2026-03-22
+
+### Context
+Added an AI-powered cover letter generator that creates tailored cover letters
+from a user's resume and target job description. Uses the same Groq + llama-3.3-70b
+pipeline as the other AI features.
+
+### API Route (`src/app/api/ai/cover-letter/route.ts`)
+- **Method:** POST
+- **Input:** `{ resume, jobDescription, tone }`
+- **Tone options:** `professional` (default), `confident`, `enthusiastic`
+- **Output:** `{ result: { coverLetter, highlights, wordCount } }`
+- **Model:** llama-3.3-70b-versatile, temp 0.75, max_tokens 2000
+- **Prompt engineering:**
+  - Strong hook opening (no "I am writing to apply")
+  - Connects 2-3 specific resume experiences to job requirements
+  - Quantifies achievements where possible
+  - 250-350 words, 3-4 paragraphs
+  - Returns key points used from resume as `highlights` array
+
+### UI Page (`src/app/cover-letter/page.tsx`)
+- Two-column input: resume textarea + job description textarea
+- Tone selector with 3 options (visual toggle buttons)
+- Loading skeleton animation
+- Result card with:
+  - Cover letter text in a styled container
+  - Word count badge
+  - **Copy to clipboard** button
+  - **Download as .txt** button
+  - Key resume points used (highlight badges)
+  - Regenerate button
+- Full scroll animations using shared motion variants
+- Error handling with animated error messages
+
+### Navigation
+- Added to **navbar** user dropdown (FileText icon)
+- Added to **footer** links
+- Added **Cover Letter Generator** feature card to landing page Features section (cyan theme)
+
+### New files
+```
+src/app/api/ai/cover-letter/route.ts    # AI cover letter generation endpoint
+src/app/cover-letter/page.tsx            # Full cover letter generator page
+```
+
+### Modified files
+```
+src/components/landing/features.tsx      # Added Cover Letter Generator feature card
+src/components/landing/footer.tsx        # Added Cover Letter nav link
+src/components/landing/navbar.tsx        # Added Cover Letter to user dropdown menu
+```
