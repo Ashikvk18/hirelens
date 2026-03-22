@@ -605,3 +605,35 @@ src/app/jobs/page.tsx                     # Added Interview Prep + Skills Roadma
 - **Footer**: Matching gradient logo, navigation links
 - **Internal pages**: Consistent glassmorphism headers (`bg-background/70 backdrop-blur-2xl`)
 - **Globals**: `.bg-grid` dot texture, `.glow-sm/.glow-md` utilities, custom selection color
+
+---
+
+## Mobile / Cross-Platform Support ✅
+**Date:** 2026-03-21
+
+### What was done
+- **Viewport meta**: Proper `width=device-width`, `initial-scale=1`, `viewport-fit=cover` for notched phones
+- **Apple Web App**: `capable: true`, `black-translucent` status bar, app title
+- **Theme color**: `#050507` for browser chrome matching
+- **Touch optimizations** (globals.css):
+  - Prevent iOS zoom on input focus (`font-size: 16px !important` on mobile)
+  - Tap highlight disabled (`-webkit-tap-highlight-color: transparent`)
+  - Minimum 36px touch targets for buttons/links on mobile
+  - Smooth scroll + `-webkit-overflow-scrolling: touch`
+- **Bottom-sheet modals**: Apply modal, Contacts modal, and Auth modal all slide up from bottom on mobile (`items-end sm:items-center`), with rounded top corners and `max-h-[90vh] overflow-y-auto`
+- **Scrollable tabs**: Interview Prep (Technical + Behavioral) tabs use horizontal scroll on mobile (`scroll-x-auto` with hidden scrollbar) instead of wrapping
+- **Tab labels always visible**: Removed `hidden sm:inline` on tab labels, added `shrink-0 whitespace-nowrap`
+- **Safe area insets**: `.safe-top` / `.safe-bottom` utilities for notched devices, applied to `<body>`
+- **Analyze page header**: Updated to match glassmorphism style with mobile-friendly sizing
+- **All pages already responsive**: Jobs search (`flex-col sm:flex-row`), Profile form (`grid sm:grid-cols-2`), Applications stats (`grid-cols-2 sm:grid-cols-5`), Skills Roadmap gap analysis (`grid sm:grid-cols-2`)
+
+### Modified files
+```
+src/app/layout.tsx                         # Viewport export, Apple Web App, safe areas
+src/app/globals.css                        # Mobile touch optimizations, scroll-x-auto, safe areas
+src/app/analyze/page.tsx                   # Header glassmorphism + mobile sizing
+src/app/jobs/page.tsx                      # Bottom-sheet modals (Apply + Contacts)
+src/components/auth/auth-modal.tsx         # Bottom-sheet on mobile
+src/app/interview-prep/technical/page.tsx  # Scrollable tabs
+src/app/interview-prep/behavioral/page.tsx # Scrollable tabs
+```
