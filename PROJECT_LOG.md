@@ -891,48 +891,44 @@ src/components/landing/hero.tsx          # Spline visible on all breakpoints, re
 ---
 
 ## Animated Hero Background — Crowd Image Integration ✅
-**Date:** 2026-03-21
+**Date:** 2026-03-21 (revised)
 
 ### Concept
 A crowd illustration is used as an immersive animated background in the hero section.
 The image shows suited figures with a small standout character in gold at bottom-center,
 visually communicating: "stand out in a competitive job market using HireLens."
 
-### Implementation: `AnimatedHeroBackground` component
+### Implementation: `AnimatedHeroBackground` — 3-Layer Parallax System
 
-**7-layer compositing stack (back to front):**
-1. **Base dark gradient** — ensures background never looks empty
-2. **Static full image** — very low opacity (6%) base reference layer
-3. **5 animated zones** (4 crowd regions + 1 focal character):
-   - Each zone is the full image with a CSS `clip-path` isolating its region
-   - Independent Framer Motion animation with different drift directions, durations (10–16s)
-   - Crowd zones at 12% opacity with subtle blur
-   - Focal character at 22% opacity + warm amber tint + gentle scale pulse (1.0→1.015)
-4. **Purple/violet color grading** — `mix-blend-color` + `mix-blend-overlay`
-5. **Edge gradient masks** — left/right fade, top/bottom fade, radial vignette at 75%
-6. **Noise/grain texture** — SVG-based fractalNoise at 1.5% opacity
-7. **Dark glass overlay** — `bg-background/40` + `backdrop-blur` for text readability
+The background uses **3 true depth layers** from a single image, each with different
+blur, opacity, scale, and motion speed to create a cinematic parallax effect.
 
-### Zone map (based on image composition analysis)
-| Zone | Region | Clip Path | Motion | Duration |
-|------|--------|-----------|--------|----------|
-| Left crowd | 0–32% h | polygon clip | rightward drift + slight vertical | 14s |
-| Center-left | 25–55% h | polygon clip | vertical sway + micro horizontal | 12s |
-| Center-right | 45–78% h | polygon clip | leftward drift + vertical | 16s |
-| Right crowd | 70–100% h | polygon clip | leftward drift + vertical sway | 13s |
-| Focal character | 36–64% h, 48–100% v | polygon clip | float up + scale pulse | 10s |
+**Layer stack (back to front):**
+
+| Layer | Role | Opacity | Blur | Scale | Motion | Duration |
+|-------|------|---------|------|-------|--------|----------|
+| **L1 — Far** | Atmospheric haze | 9% | 10px | 112% (scaled up) | Slow drift x/y + breathing scale | 22s |
+| **L2 — Mid** | Crowd presence | 18% | 1.5px | 100% | Gentle horizontal sway + micro vertical | 18s |
+| **L3 — Focal** | Gold character emphasis | 32% | 0px (sharp) | 100% (clip-path isolated) | Float up + scale pulse (1.0→1.02) | 12s |
+
+**Post-processing layers:**
+- Purple/violet color grading (`mix-blend-color` + `mix-blend-soft-light`)
+- Edge gradient masks: left/right fade, top/bottom fade, radial vignette centered at 60% height
+- SVG-based fractalNoise grain at 2% opacity
+- Mobile extra overlay for text readability
+
+### Key design decisions
+- L1 uses `-inset-[10%]` + `object-cover` so the blurred haze extends beyond viewport edges
+- L3 uses `clip-path: polygon(32% 42%, 68% 42%, 68% 100%, 32% 100%)` to isolate the focal character
+- L3 has a warm amber radial glow (`rgba(245,158,11,0.06)`) to subtly warm the gold-suited character
+- Each layer enters sequentially (0.2s, 0.5s, 0.8s delay) for a cinematic reveal
+- `useReducedMotion` disables all Framer Motion animation when user prefers reduced motion
 
 ### Performance
-- CSS transforms only (GPU-accelerated)
-- `useReducedMotion` respected — all animation disabled if user prefers
-- Higher overlay opacity on mobile for readability
+- CSS transforms only (GPU-accelerated, no layout thrash)
 - `next/image` with `priority` for LCP optimization
 - All layers use `pointer-events-none` and `aria-hidden`
-
-### Hero integration
-- Replaced old gradient orbs background with `<AnimatedHeroBackground />`
-- Top fade div gets `z-[2]` to blend navbar properly
-- Two-column layout and Spline container unchanged
+- Mobile: extra `bg-background/25` overlay, simplified to `bg-background/10` at sm
 
 ### New files
 ```
