@@ -540,11 +540,24 @@ src/app/jobs/page.tsx            # Added contact finder button + modal
 ### What was built
 
 #### Interview Preparation (`/interview-prep`)
-- AI-powered interview question generator using Groq LLM
-- Categorized Q&A: Behavioral, Technical, Situational, Role-Specific
-- Each question has a **tip** and **sample answer**
-- "Questions to Ask" section with smart interviewer questions
-- General interview tips
+- Split into two dedicated prep tracks:
+
+**Technical Interview** (`/interview-prep/technical`)
+- Coding challenges with difficulty badges (easy/medium/hard)
+- System design questions with architecture outlines
+- Conceptual/theory deep-dives on the tech stack
+- Debugging & troubleshooting scenarios
+- Tools & frameworks questions
+- Technical interview tips
+
+**Behavioral Interview** (`/interview-prep/behavioral`)
+- STAR method questions tagged by category (leadership, teamwork, conflict, failure, achievement, adaptability)
+- Situational/hypothetical workplace scenarios
+- Culture fit questions (tailored to company when provided)
+- Smart questions to ask the interviewer
+- Behavioral interview tips
+
+- Landing page at `/interview-prep` lets user choose Technical or Behavioral
 - Custom search: enter any job title + company to generate fresh questions
 - Accessible from every job card via "Interview Prep" button
 
@@ -562,10 +575,13 @@ src/app/jobs/page.tsx            # Added contact finder button + modal
 ```
 src/
 ├── app/
-│   ├── interview-prep/page.tsx           # Interview prep UI (tabbed Q&A)
+│   ├── interview-prep/
+│   │   ├── page.tsx                      # Landing page (choose Technical or Behavioral)
+│   │   ├── technical/page.tsx            # Technical interview Q&A
+│   │   └── behavioral/page.tsx           # Behavioral interview Q&A (STAR method)
 │   ├── skills-roadmap/page.tsx           # Skills gap + roadmap UI
 │   └── api/
-│       ├── interview-prep/route.ts       # Groq AI interview question generation
+│       ├── interview-prep/route.ts       # Groq AI — supports type=technical|behavioral
 │       └── skills-roadmap/route.ts       # Groq AI skills analysis + roadmap
 ```
 
