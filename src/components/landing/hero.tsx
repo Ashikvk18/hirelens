@@ -124,14 +124,11 @@ export function Hero() {
 
         {/* ── Right: Spline / Fallback ── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative hidden w-full max-w-[460px] flex-shrink-0 lg:block xl:max-w-[500px]"
+          transition={{ duration: 0.7, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }}
+          className="relative w-full max-w-[280px] flex-shrink-0 sm:max-w-[320px] lg:max-w-[420px] xl:max-w-[460px]"
         >
-          {/* Glow behind Spline */}
-          <div className="pointer-events-none absolute -inset-12 rounded-full bg-primary/[0.04] blur-[60px]" />
-
           <div className="relative aspect-square w-full">
             <HeroSpline />
           </div>
