@@ -776,3 +776,71 @@ src/components/ui/badge.tsx              # Colored borders, shadow
 src/components/ui/textarea.tsx           # Focus glow, leading-relaxed
 src/components/ui/progress.tsx           # Transparent track
 ```
+
+---
+
+## Landing Page Refinement Pass ✅
+**Date:** 2026-03-21
+
+### Design philosophy
+- Tasteful, not over-animated — removed `animate-border-glow`, `animate-glow-pulse` from CTA
+- Removed `filter: blur()` from stagger variants (cleaner rendering, less distracting)
+- Controlled stagger with proper parent/child variant orchestration
+- No spring/rotate on logo (too playful) — replaced with shadow-only hover
+
+### 1. Navbar
+- Entrance animation: slides down + fades in on mount (`motion.nav`)
+- Scroll threshold lowered to 10px for faster glass effect
+- Height tightened to `h-14`, padding refined
+- Logo: no spring animation, just shadow glow on hover
+- Dropdown: backdrop-blur glass, tighter font sizes (11–12px), ring on avatar
+- Mobile menu: `bg-background/95 backdrop-blur-2xl`, faster 200ms transition
+- Dividers use `bg-white/[0.06]` instead of `bg-border`
+
+### 2. Hero — Premium Two-Column
+- **Left column**: Badge → Headline → Subheadline → CTAs → Credibility chips
+- **Right column**: `HeroSpline` component (desktop only, `lg:block`)
+- Parent stagger orchestration: `staggerChildren: 0.1`, `delayChildren: 0.15`
+- Child variant `fadeSlide`: opacity + y-slide, custom easing `[0.25, 0.1, 0.25, 1]`
+- Credibility chips: simple stagger (no CSS float animation — cleaner)
+- Background: 3 gradient orbs at reduced opacity (10/8/6%), radial vignette at 72%
+- `min-h-[100dvh]` for proper mobile viewport
+- Glow halo behind Spline container (`bg-primary/[0.04] blur-[60px]`)
+- CTAs: `shadow-lg shadow-primary/20` (not `shadow-xl` — subtler)
+
+### 3. HeroSpline Component (`spline-scene.tsx`)
+- Renamed export: `SplineScene` → `HeroSpline`
+- Accepts optional `sceneUrl` prop
+- Dynamic import: `import("@splinetool/react-spline")` only when URL provided + in viewport
+- IntersectionObserver with 5% threshold for lazy loading
+- Graceful fallback: `.catch()` silently falls back to CSS
+- CSS fallback: 3 orbital rings, core glow, floating data labels, SVG connection lines
+- Documented integration instructions in JSDoc comment
+
+### 4. Features
+- Removed `filter: blur()` from item variant and heading
+- Stagger: `0.07s` between cards, `0.4s` duration per card
+- Heading: simple opacity + y transition
+
+### 5. How It Works
+- Removed `filter: blur()` from step variant and heading
+- Step delay: `i * 0.12` (was `i * 0.15`)
+
+### 6. CTA
+- Removed `animate-border-glow` from card wrapper
+- Removed `animate-glow-pulse` and `hover:scale` from button
+- Entrance: simple opacity + y (no blur)
+- Button: `shadow-lg` → `shadow-xl` on hover only
+
+### 7. Footer
+- No changes (already refined in prior pass)
+
+### Modified files
+```
+src/components/landing/navbar.tsx        # Entrance animation, tighter styling, refined dropdown
+src/components/landing/hero.tsx          # Two-column layout, parent stagger, HeroSpline import
+src/components/landing/spline-scene.tsx  # Rewritten as HeroSpline with dynamic import scaffold
+src/components/landing/features.tsx      # Cleaned animation variants
+src/components/landing/how-it-works.tsx  # Cleaned animation variants
+src/components/landing/cta.tsx           # Removed over-animation
+```
