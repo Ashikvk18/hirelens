@@ -29,7 +29,7 @@
 
 <br/>
 
-[🚀 **Live Demo**](#) · [📖 **Documentation**](#features) · [🐛 **Report Bug**](https://github.com/Ashikvk18/hirelens/issues) · [✨ **Request Feature**](https://github.com/Ashikvk18/hirelens/issues)
+[🚀 **Live Demo**](https://hirelens-1-g304.onrender.com) · [📖 **Documentation**](#features) · [🐛 **Report Bug**](https://github.com/Ashikvk18/hirelens/issues) · [✨ **Request Feature**](https://github.com/Ashikvk18/hirelens/issues)
 
 </div>
 
@@ -185,7 +185,7 @@ Track every application with status updates (Applied → Interviewing → Offere
 | **AI Engine** | Groq SDK → LLaMA 3.3 70B Versatile |
 | **Job Data** | JSearch API (RapidAPI) |
 | **Email Finder** | Hunter.io Domain Search API |
-| **Deployment** | Vercel-ready (Edge Runtime compatible) |
+| **Deployment** | Render (https://hirelens-1-g304.onrender.com) |
 
 </div>
 
@@ -244,7 +244,7 @@ Run the schema in your Supabase SQL editor:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) — you're live! 🎉
+Open [http://localhost:3000](http://localhost:3000) for local dev, or visit the live site at [https://hirelens-1-g304.onrender.com](https://hirelens-1-g304.onrender.com) 🎉
 
 <br/>
 
