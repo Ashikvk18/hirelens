@@ -4,8 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Target, Briefcase, Shield, Zap, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
-import { HeroSpline } from "./spline-scene";
-import { AnimatedHeroBackground } from "./animated-hero-background";
+import { AnimatedHeroBackground, AnimatedCrowdScene } from "./animated-hero-background";
 
 /* ── Animation config ── */
 const stagger = {
@@ -113,15 +112,15 @@ export function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* ── Right: Spline / Fallback ── */}
+        {/* ── Right: Animated Crowd Scene ── */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }}
-          className="relative w-full max-w-[280px] flex-shrink-0 sm:max-w-[320px] lg:max-w-[420px] xl:max-w-[460px]"
+          className="relative w-full max-w-[300px] flex-shrink-0 sm:max-w-[360px] lg:max-w-[440px] xl:max-w-[500px]"
         >
-          <div className="relative aspect-square w-full">
-            <HeroSpline />
+          <div className="relative aspect-[4/3] w-full">
+            <AnimatedCrowdScene />
           </div>
         </motion.div>
       </div>
