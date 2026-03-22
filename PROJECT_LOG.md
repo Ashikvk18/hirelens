@@ -940,3 +940,71 @@ src/components/landing/animated-hero-background.tsx     # AnimatedHeroBackground
 ```
 src/components/landing/hero.tsx  # Replaced gradient orbs bg with AnimatedHeroBackground
 ```
+
+---
+
+## Hero Background v3 — SVG Silhouette Crowd System ✅
+**Date:** 2026-03-21
+
+### Context
+Previous approaches (direct crowd image as background, clip-path zones) felt too literal
+and not premium enough. The image is now used only as **conceptual inspiration**.
+
+### Implementation: Custom SVG Silhouette Crowd with Cinematic Depth
+
+The background is built entirely from code — no images, no video, no AI generation.
+Pure SVG + CSS transforms + Framer Motion.
+
+**Architecture:**
+- A simplified SVG human silhouette path (head + torso, 40×80 viewBox)
+- ~30 figures placed across 3 depth layers + 1 hero figure
+- Each figure has independent sway animation (different duration, delay, amplitude)
+- Each layer has its own parallax drift
+
+**Layer stack:**
+
+| Layer | Figures | Opacity | Blur | Drift | Duration |
+|-------|---------|---------|------|-------|----------|
+| **Far** | 10 small silhouettes | 5–7% | 3px | leftward ±15px | 30s |
+| **Mid** | 8 medium silhouettes | 9–11% | 1px | rightward ±10px | 25s |
+| **Hero** | 1 center figure | 25% | 0px | subtle sway | 8s |
+| **Near** | 4 large silhouettes | 4–5% | 0px | leftward ±8px | 22s |
+
+**Hero figure (center):**
+- Positioned at ~48% horizontal, 70% vertical
+- 25% opacity (3× brighter than crowd)
+- Violet glow via `drop-shadow(0 0 12px rgba(139,92,246,0.4))`
+- Lighter color `rgb(220,210,255)` vs crowd `rgb(180,180,200)`
+- Radial violet spotlight + warm amber accent gradient behind it
+
+**Atmosphere:**
+- 18 floating violet particles with independent drift (15–35s loops)
+- Ambient gradient orbs (primary + accent) for color depth
+- Ground fade (bottom 35% → background color)
+- Radial vignette at 78%
+- Side + top gradient fades
+- Mobile: extra 10% darkening overlay
+
+**Per-figure motion:**
+- 5-keyframe sway: `[-amt, +amt, -amt×0.5, +amt×0.7, -amt]`
+- Micro vertical bob: `[0, -amt×0.4, +amt×0.2, -amt×0.3, 0]`
+- Duration varies 8–17s per figure (no two figures move identically)
+- Staggered delays prevent synchronization
+
+### Performance
+- Zero images, zero canvas, zero video
+- Pure CSS transforms (GPU-accelerated)
+- `useReducedMotion` disables all animation
+- Particles memoized with `useMemo` (no re-generation on re-render)
+- ~30 SVG paths + 18 particle divs = lightweight DOM
+
+### Hero layout
+- Centered single-column text (no right-side visual)
+- `max-w-3xl`, all text center-aligned
+- CTA buttons centered with `sm:justify-center`
+
+### Modified files
+```
+src/components/landing/animated-hero-background.tsx  # Complete rewrite: SVG silhouette system
+src/components/landing/hero.tsx                      # Centered layout, removed right column
+```
