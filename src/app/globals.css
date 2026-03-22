@@ -68,6 +68,13 @@ body {
   outline-offset: 2px;
 }
 
+/* Improved input focus glow */
+input:focus, select:focus {
+  border-color: rgba(124, 58, 237, 0.3) !important;
+  background-color: rgba(26, 26, 31, 0.7) !important;
+  transition: all 0.2s ease;
+}
+
 /* Mobile optimizations */
 @media (max-width: 640px) {
   html {
